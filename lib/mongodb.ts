@@ -1,13 +1,5 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env.local"
-  );
-}
-
 // Extend global to cache the mongoose connection
 declare global {
   // eslint-disable-next-line no-var
@@ -24,6 +16,15 @@ if (!cached) {
 }
 
 async function connectDB() {
+  // Validate at request time, not module load time, so Next.js build succeeds
+  // even when MONGODB_URI is not present in the build environment.
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Please define the MONGODB_URI environment variable inside .env.local"
+    );
+  }
+
   if (cached.conn) {
     return cached.conn;
   }
