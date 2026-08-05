@@ -8,7 +8,11 @@ interface BalanceSummaryCardProps {
   totalExpense: number;
   balance: number;
   upcomingCount?: number;
+  upcomingIncomeTotal?: number;
   upcomingExpenseTotal?: number;
+  totalCogs?: number;
+  totalFees?: number;
+  totalAdSpend?: number;
 }
 
 export default function BalanceSummaryCard({
@@ -16,7 +20,11 @@ export default function BalanceSummaryCard({
   totalExpense,
   balance,
   upcomingCount = 0,
+  upcomingIncomeTotal = 0,
   upcomingExpenseTotal = 0,
+  totalCogs = 0,
+  totalFees = 0,
+  totalAdSpend = 0,
 }: BalanceSummaryCardProps) {
   const isProfit = balance >= 0;
   const [animated, setAnimated] = useState(false);
@@ -25,6 +33,10 @@ export default function BalanceSummaryCard({
     const timer = setTimeout(() => setAnimated(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  const totalDeductions = totalCogs + totalFees + totalAdSpend;
+  const netEcomProfit = totalIncome - totalDeductions - totalExpense;
+  const hasEcomData = totalDeductions > 0;
 
   return (
     <div
@@ -37,13 +49,25 @@ export default function BalanceSummaryCard({
       }`}
     >
       {/* Background decoration */}
-      <div className={`absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-20 ${isProfit ? "bg-emerald-300" : "bg-rose-300"}`} />
-      <div className={`absolute -bottom-10 -left-10 w-32 h-32 rounded-full opacity-15 ${isProfit ? "bg-teal-300" : "bg-pink-300"}`} />
+      <div
+        className={`absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-20 ${
+          isProfit ? "bg-emerald-300" : "bg-rose-300"
+        }`}
+      />
+      <div
+        className={`absolute -bottom-10 -left-10 w-32 h-32 rounded-full opacity-15 ${
+          isProfit ? "bg-teal-300" : "bg-pink-300"
+        }`}
+      />
 
-      {/* Top row: status + upcoming pill */}
+      {/* Top row: status + upcoming count pill */}
       <div className="flex items-center justify-between mb-4 gap-2">
         <div className="flex items-center gap-2 min-w-0">
-          <div className={`w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 ${isProfit ? "bg-emerald-700/50" : "bg-rose-700/50"}`}>
+          <div
+            className={`w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 ${
+              isProfit ? "bg-emerald-700/50" : "bg-rose-700/50"
+            }`}
+          >
             {isProfit ? "↑" : "↓"}
           </div>
           <span className="text-white/90 font-semibold text-xs tracking-wide uppercase truncate">
@@ -52,52 +76,88 @@ export default function BalanceSummaryCard({
         </div>
 
         {upcomingCount > 0 && (
-          <div className="flex items-center gap-1 bg-white/25 backdrop-blur-sm rounded-lg px-2 py-1 shrink-0">
+          <div className="flex items-center gap-1.5 bg-white/25 backdrop-blur-sm rounded-lg px-2.5 py-1 shrink-0">
             <span className="text-white text-xs">📅</span>
-            <span className="text-white font-bold text-xs">{upcomingCount}</span>
-            <span className="text-white/70 text-[9px]">due</span>
+            <span className="text-white font-bold text-xs">
+              {upcomingCount} Upcoming
+            </span>
           </div>
         )}
       </div>
 
-      {/* Balance */}
+      {/* Net Balance */}
       <div className="mb-4">
-        <p className="text-white/70 text-xs mb-1">Net Balance</p>
+        <p className="text-white/70 text-xs mb-1">Net Cashflow Balance</p>
         <p className="text-white font-bold text-3xl tracking-tight leading-none">
           {isProfit ? "+" : "−"} {formatCurrency(Math.abs(balance))}
         </p>
       </div>
 
-      {/* Stats grid — 2 cols always, upcoming on new row if present */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Primary Stats grid: Income & Expense */}
+      <div className="grid grid-cols-2 gap-2 mb-2">
         <div className="bg-white/15 backdrop-blur-sm rounded-xl p-2.5">
           <div className="flex items-center gap-1 mb-1">
             <span className="text-white/80 text-xs">↑</span>
-            <span className="text-white/80 text-xs font-medium">Income</span>
+            <span className="text-white/80 text-xs font-medium">Income / Sales</span>
           </div>
-          <p className="text-white font-bold text-sm truncate">{formatCurrency(totalIncome)}</p>
+          <p className="text-white font-bold text-sm truncate">
+            {formatCurrency(totalIncome)}
+          </p>
         </div>
 
         <div className="bg-white/15 backdrop-blur-sm rounded-xl p-2.5">
           <div className="flex items-center gap-1 mb-1">
             <span className="text-white/80 text-xs">↓</span>
-            <span className="text-white/80 text-xs font-medium">Expense</span>
+            <span className="text-white/80 text-xs font-medium">Expenses</span>
           </div>
-          <p className="text-white font-bold text-sm truncate">{formatCurrency(totalExpense)}</p>
+          <p className="text-white font-bold text-sm truncate">
+            {formatCurrency(totalExpense)}
+          </p>
         </div>
+      </div>
 
-        {upcomingCount > 0 && (
-          <div className="col-span-2 bg-white/15 backdrop-blur-sm rounded-xl p-2.5 flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className="text-white/80 text-xs">⏳</span>
-              <span className="text-white/80 text-xs font-medium">
-                {upcomingCount} Upcoming Payment{upcomingCount > 1 ? "s" : ""}
+      {/* Upcoming In & Out Payments Row */}
+      {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0 || upcomingCount > 0) && (
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div className="bg-emerald-950/30 border border-emerald-300/20 backdrop-blur-sm rounded-xl p-2.5">
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-emerald-200 text-xs">⏳ ↑</span>
+              <span className="text-emerald-100 text-xs font-medium">
+                Upcoming IN
               </span>
             </div>
-            <p className="text-white font-bold text-sm">{formatCurrency(upcomingExpenseTotal)}</p>
+            <p className="text-white font-bold text-sm truncate">
+              {formatCurrency(upcomingIncomeTotal)}
+            </p>
           </div>
-        )}
-      </div>
+
+          <div className="bg-rose-950/30 border border-rose-300/20 backdrop-blur-sm rounded-xl p-2.5">
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-rose-200 text-xs">⏳ ↓</span>
+              <span className="text-rose-100 text-xs font-medium">
+                Upcoming OUT
+              </span>
+            </div>
+            <p className="text-white font-bold text-sm truncate">
+              {formatCurrency(upcomingExpenseTotal)}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Optional eCommerce COGS & Ad Fee breakdown */}
+      {hasEcomData && (
+        <div className="bg-black/20 backdrop-blur-sm rounded-xl p-2.5 mt-2 space-y-1 text-xs">
+          <div className="flex justify-between text-white/80">
+            <span>COGS + Platform + Ads:</span>
+            <span className="font-semibold">{formatCurrency(totalDeductions)}</span>
+          </div>
+          <div className="flex justify-between text-white font-bold border-t border-white/10 pt-1">
+            <span>Estimated Net eCommerce Margin:</span>
+            <span>{formatCurrency(netEcomProfit)}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

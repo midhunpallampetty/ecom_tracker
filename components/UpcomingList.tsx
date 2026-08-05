@@ -52,6 +52,16 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
     }
   };
 
+  const totalUpcomingIn = items
+    .filter((item) => item.type === "income")
+    .reduce((acc, item) => acc + item.amount, 0);
+
+  const totalUpcomingOut = items
+    .filter((item) => item.type === "expense")
+    .reduce((acc, item) => acc + item.amount, 0);
+
+  const netUpcoming = totalUpcomingIn - totalUpcomingOut;
+
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-14 gap-3">
@@ -65,7 +75,38 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
+      {/* Header Summary Cards for Total Upcoming In & Out */}
+      <div className="grid grid-cols-3 gap-2">
+        <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-0.5">
+            Upcoming IN
+          </p>
+          <p className="font-bold text-sm text-emerald-700 dark:text-emerald-300">
+            +{formatCurrency(totalUpcomingIn)}
+          </p>
+        </div>
+
+        <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/40 text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-0.5">
+            Upcoming OUT
+          </p>
+          <p className="font-bold text-sm text-rose-700 dark:text-rose-300">
+            −{formatCurrency(totalUpcomingOut)}
+          </p>
+        </div>
+
+        <div className="p-3 rounded-2xl bg-violet-50 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-800/40 text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-0.5">
+            Net Expected
+          </p>
+          <p className={`font-bold text-sm ${netUpcoming >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+            {netUpcoming >= 0 ? "+" : "−"}{formatCurrency(Math.abs(netUpcoming))}
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-3">
       {items.map((item) => {
         const { label, urgency } = getDateInfo(item.expectedDate);
         const isIncome = item.type === "income";
@@ -147,6 +188,7 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }

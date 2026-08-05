@@ -16,6 +16,11 @@ interface Transaction {
   amount: number;
   type: "income" | "expense";
   description: string;
+  channel?: string;
+  sku?: string;
+  cogs?: number;
+  platformFee?: number;
+  adSpend?: number;
   createdAt: string;
 }
 
@@ -77,7 +82,13 @@ export default function DashboardPage() {
   const totalIncome   = transactions.filter(t => t.type === "income") .reduce((s,t) => s + t.amount, 0);
   const totalExpense  = transactions.filter(t => t.type === "expense").reduce((s,t) => s + t.amount, 0);
   const balance       = totalIncome - totalExpense;
+
+  const upcomingIncomeTotal  = upcomingItems.filter(u => u.type === "income").reduce((s,u) => s + u.amount, 0);
   const upcomingExpenseTotal = upcomingItems.filter(u => u.type === "expense").reduce((s,u) => s + u.amount, 0);
+
+  const totalCogs     = transactions.reduce((s,t) => s + (t.cogs || 0), 0);
+  const totalFees     = transactions.reduce((s,t) => s + (t.platformFee || 0), 0);
+  const totalAdSpend  = transactions.reduce((s,t) => s + (t.adSpend || 0), 0);
 
   const handleLogout = async () => {
     await fetch("/api/auth/session", {
@@ -190,8 +201,15 @@ export default function DashboardPage() {
 
         <div className="px-5 mb-4">
           <BalanceSummaryCard
-            totalIncome={totalIncome} totalExpense={totalExpense} balance={balance}
-            upcomingCount={upcomingItems.length} upcomingExpenseTotal={upcomingExpenseTotal}
+            totalIncome={totalIncome}
+            totalExpense={totalExpense}
+            balance={balance}
+            upcomingCount={upcomingItems.length}
+            upcomingIncomeTotal={upcomingIncomeTotal}
+            upcomingExpenseTotal={upcomingExpenseTotal}
+            totalCogs={totalCogs}
+            totalFees={totalFees}
+            totalAdSpend={totalAdSpend}
           />
         </div>
 
@@ -247,8 +265,8 @@ export default function DashboardPage() {
             💼
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight leading-none">My Wallet</h1>
-            <p className="text-slate-500 text-xs">Personal Finance</p>
+            <h1 className="text-white font-bold text-lg tracking-tight leading-none">eCom Tracker</h1>
+            <p className="text-slate-500 text-xs">Sales & Cashflow</p>
           </div>
         </div>
 
@@ -262,23 +280,24 @@ export default function DashboardPage() {
           </div>
           <div className="w-px h-8 bg-slate-800" />
           <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Income</p>
+            <p className="text-slate-500 text-xs uppercase tracking-wider">Sales / Income</p>
             <p className="font-bold text-lg text-emerald-400">₹{totalIncome.toLocaleString("en-IN")}</p>
           </div>
           <div className="w-px h-8 bg-slate-800" />
           <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Expense</p>
+            <p className="text-slate-500 text-xs uppercase tracking-wider">Expenses</p>
             <p className="font-bold text-lg text-rose-400">₹{totalExpense.toLocaleString("en-IN")}</p>
           </div>
-          {upcomingItems.length > 0 && (
-            <>
-              <div className="w-px h-8 bg-slate-800" />
-              <div className="text-center">
-                <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming</p>
-                <p className="font-bold text-lg text-violet-400">{upcomingItems.length} due</p>
-              </div>
-            </>
-          )}
+          <div className="w-px h-8 bg-slate-800" />
+          <div className="text-center">
+            <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming In</p>
+            <p className="font-bold text-lg text-emerald-400">₹{upcomingIncomeTotal.toLocaleString("en-IN")}</p>
+          </div>
+          <div className="w-px h-8 bg-slate-800" />
+          <div className="text-center">
+            <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming Out</p>
+            <p className="font-bold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
@@ -306,8 +325,15 @@ export default function DashboardPage() {
           <div className="p-5 space-y-4">
             {/* Balance card */}
             <BalanceSummaryCard
-              totalIncome={totalIncome} totalExpense={totalExpense} balance={balance}
-              upcomingCount={upcomingItems.length} upcomingExpenseTotal={upcomingExpenseTotal}
+              totalIncome={totalIncome}
+              totalExpense={totalExpense}
+              balance={balance}
+              upcomingCount={upcomingItems.length}
+              upcomingIncomeTotal={upcomingIncomeTotal}
+              upcomingExpenseTotal={upcomingExpenseTotal}
+              totalCogs={totalCogs}
+              totalFees={totalFees}
+              totalAdSpend={totalAdSpend}
             />
 
             {/* Navigation */}

@@ -4,6 +4,11 @@ export interface ITransaction extends Document {
   amount: number;
   type: "income" | "expense";
   description: string;
+  channel?: string;
+  sku?: string;
+  cogs?: number;
+  platformFee?: number;
+  adSpend?: number;
   createdAt: Date;
 }
 
@@ -24,6 +29,31 @@ const TransactionSchema: Schema = new Schema(
       default: "",
       maxlength: [200, "Description cannot exceed 200 characters"],
       trim: true,
+    },
+    channel: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    sku: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    cogs: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    platformFee: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    adSpend: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
   },
   {

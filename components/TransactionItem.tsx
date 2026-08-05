@@ -8,6 +8,11 @@ interface Transaction {
   amount: number;
   type: "income" | "expense";
   description: string;
+  channel?: string;
+  sku?: string;
+  cogs?: number;
+  platformFee?: number;
+  adSpend?: number;
   createdAt: string;
 }
 
@@ -26,6 +31,10 @@ export default function TransactionItem({
   const [deleting, setDeleting] = useState(false);
 
   const isIncome = transaction.type === "income";
+
+  // Calculate net eCommerce profit for income transaction if fields exist
+  const totalDeductions = (transaction.cogs || 0) + (transaction.platformFee || 0) + (transaction.adSpend || 0);
+  const netOrderProfit = isIncome ? transaction.amount - totalDeductions : 0;
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -64,10 +73,23 @@ export default function TransactionItem({
 
         {/* Details */}
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate">
-            {transaction.description || (isIncome ? "Income" : "Expense")}
-          </p>
-          <div className="flex items-center gap-2 mt-0.5">
+          <div className="flex items-center gap-2">
+            <p className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate">
+              {transaction.description || (isIncome ? "Income" : "Expense")}
+            </p>
+            {transaction.channel && (
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 shrink-0">
+                {transaction.channel}
+              </span>
+            )}
+            {transaction.sku && (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 shrink-0">
+                SKU: {transaction.sku}
+              </span>
+            )}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2 mt-1">
             <span
               className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                 isIncome
@@ -77,10 +99,23 @@ export default function TransactionItem({
             >
               {isIncome ? "Income" : "Expense"}
             </span>
+
             <span className="text-slate-400 dark:text-slate-500 text-xs">
               {formatDate(transaction.createdAt)} · {formatTime(transaction.createdAt)}
             </span>
           </div>
+
+          {/* Optional eCommerce Breakdown tags */}
+          {isIncome && totalDeductions > 0 && (
+            <div className="flex items-center gap-2 text-[10px] text-slate-500 dark:text-slate-400 mt-1.5 pt-1.5 border-t border-slate-100 dark:border-slate-800/60">
+              {transaction.cogs ? <span>COGS: ₹{transaction.cogs}</span> : null}
+              {transaction.platformFee ? <span>Fee: ₹{transaction.platformFee}</span> : null}
+              {transaction.adSpend ? <span>Ads: ₹{transaction.adSpend}</span> : null}
+              <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                Net Margin: ₹{netOrderProfit}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Amount */}
