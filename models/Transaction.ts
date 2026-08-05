@@ -9,6 +9,8 @@ export interface ITransaction extends Document {
   cogs?: number;
   platformFee?: number;
   adSpend?: number;
+  gstRate?: number;
+  gstAmount?: number;
   createdAt: Date;
 }
 
@@ -51,6 +53,16 @@ const TransactionSchema: Schema = new Schema(
       min: 0,
     },
     adSpend: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    gstRate: {
+      type: Number,
+      default: 18,
+      min: 0,
+    },
+    gstAmount: {
       type: Number,
       default: 0,
       min: 0,

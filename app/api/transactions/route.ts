@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
     const body = await request.json();
-    const { amount, type, description, channel, sku, cogs, platformFee, adSpend } = body;
+    const { amount, type, description, channel, sku, cogs, platformFee, adSpend, gstRate, gstAmount } = body;
 
     // Validate required fields
     if (!amount || !type) {
@@ -56,6 +56,8 @@ export async function POST(request: NextRequest) {
       cogs: typeof cogs === "number" && cogs >= 0 ? cogs : 0,
       platformFee: typeof platformFee === "number" && platformFee >= 0 ? platformFee : 0,
       adSpend: typeof adSpend === "number" && adSpend >= 0 ? adSpend : 0,
+      gstRate: typeof gstRate === "number" && gstRate >= 0 ? gstRate : 18,
+      gstAmount: typeof gstAmount === "number" && gstAmount >= 0 ? gstAmount : 0,
     });
 
     return NextResponse.json(

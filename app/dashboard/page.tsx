@@ -13,6 +13,7 @@ import UpcomingList from "@/components/UpcomingList";
 
 import MonthlyProfitChart from "@/components/MonthlyProfitChart";
 import ExportDataPromptModal from "@/components/ExportDataPromptModal";
+import GstFilingModal from "@/components/GstFilingModal";
 
 interface Transaction {
   _id: string;
@@ -56,6 +57,7 @@ export default function DashboardPage() {
   const [error,    setError]    = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("history");
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [isGstModalOpen, setIsGstModalOpen]       = useState(false);
 
   const fetchTransactions = useCallback(async () => {
     try {
@@ -192,6 +194,14 @@ export default function DashboardPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsGstModalOpen(true)}
+              title="GST Filing & Tax Calculator"
+              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 text-xs font-bold border border-amber-500/30 flex items-center gap-1.5 transition-all"
+            >
+              <span>🏛️</span>
+              <span>GST</span>
+            </button>
             <button
               onClick={() => setIsExportModalOpen(true)}
               title="Export Data as AI Prompt"
@@ -330,6 +340,13 @@ export default function DashboardPage() {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => setIsGstModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-sm font-bold transition-all duration-200 border border-amber-500/30 shadow-lg shadow-amber-500/10"
+          >
+            <span>🏛️</span>
+            <span>GST Filing Vault</span>
+          </button>
+          <button
             onClick={() => setIsExportModalOpen(true)}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 text-sm font-bold transition-all duration-200 border border-violet-500/30 shadow-lg shadow-violet-600/10"
           >
@@ -371,14 +388,23 @@ export default function DashboardPage() {
               totalAdSpend={totalAdSpend}
             />
 
-            {/* Quick Export Prompt Action */}
-            <button
-              onClick={() => setIsExportModalOpen(true)}
-              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-xs font-bold text-violet-300 bg-violet-950/50 hover:bg-violet-900/60 border border-violet-800/50 transition-all duration-200 shadow-md shadow-violet-950/40"
-            >
-              <span className="text-base">🤖</span>
-              <span>Generate AI Prompt Export</span>
-            </button>
+            {/* Quick Action Buttons */}
+            <div className="space-y-2">
+              <button
+                onClick={() => setIsGstModalOpen(true)}
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold text-amber-300 bg-amber-950/50 hover:bg-amber-900/60 border border-amber-800/50 transition-all duration-200 shadow-md shadow-amber-950/40"
+              >
+                <span className="text-base">🏛️</span>
+                <span>GST & Tax Filing Vault</span>
+              </button>
+              <button
+                onClick={() => setIsExportModalOpen(true)}
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold text-violet-300 bg-violet-950/50 hover:bg-violet-900/60 border border-violet-800/50 transition-all duration-200 shadow-md shadow-violet-950/40"
+              >
+                <span className="text-base">🤖</span>
+                <span>Generate AI Prompt Export</span>
+              </button>
+            </div>
 
             {/* Navigation */}
             <nav className="space-y-1">
@@ -520,6 +546,13 @@ export default function DashboardPage() {
         onClose={() => setIsExportModalOpen(false)}
         transactions={transactions}
         upcomingItems={upcomingItems}
+      />
+
+      {/* GST Filing & Tax Calculator Modal */}
+      <GstFilingModal
+        isOpen={isGstModalOpen}
+        onClose={() => setIsGstModalOpen(false)}
+        transactions={transactions}
       />
     </>
   );
