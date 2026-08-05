@@ -45,8 +45,8 @@ export default function CashflowGraph({ transactions }: CashflowGraphProps) {
     }));
   }, [transactions]);
 
-  const W = 340;
-  const H = 160;
+  const W = 420;
+  const H = 180;
   const PAD = { top: 20, right: 12, bottom: 28, left: 8 };
   const chartW = W - PAD.left - PAD.right;
   const chartH = H - PAD.top - PAD.bottom;
