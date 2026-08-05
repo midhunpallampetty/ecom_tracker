@@ -298,6 +298,17 @@ export default function DashboardPage() {
             <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming Out</p>
             <p className="font-bold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
           </div>
+          {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0) && (
+            <>
+              <div className="w-px h-8 bg-slate-800" />
+              <div className="text-center">
+                <p className="text-violet-400 text-xs uppercase font-bold tracking-wider">Projected Net</p>
+                <p className={`font-bold text-lg ${ (balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "text-emerald-400" : "text-rose-400" }`}>
+                  {(balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "+" : "−"}₹{Math.abs(balance + upcomingIncomeTotal - upcomingExpenseTotal).toLocaleString("en-IN")}
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-3">

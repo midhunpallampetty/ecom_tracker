@@ -34,6 +34,10 @@ export default function BalanceSummaryCard({
     return () => clearTimeout(timer);
   }, []);
 
+  const projectedIncome = totalIncome + upcomingIncomeTotal;
+  const projectedExpense = totalExpense + upcomingExpenseTotal;
+  const projectedNet = projectedIncome - projectedExpense;
+  const isProjectedProfit = projectedNet >= 0;
   const totalDeductions = totalCogs + totalFees + totalAdSpend;
   const netEcomProfit = totalIncome - totalDeductions - totalExpense;
   const hasEcomData = totalDeductions > 0;
@@ -61,7 +65,7 @@ export default function BalanceSummaryCard({
       />
 
       {/* Top row: status + upcoming count pill */}
-      <div className="flex items-center justify-between mb-4 gap-2">
+      <div className="flex items-center justify-between mb-3 gap-2">
         <div className="flex items-center gap-2 min-w-0">
           <div
             className={`w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 ${
@@ -85,12 +89,33 @@ export default function BalanceSummaryCard({
         )}
       </div>
 
-      {/* Net Balance */}
-      <div className="mb-4">
-        <p className="text-white/70 text-xs mb-1">Net Cashflow Balance</p>
-        <p className="text-white font-bold text-3xl tracking-tight leading-none">
-          {isProfit ? "+" : "−"} {formatCurrency(Math.abs(balance))}
-        </p>
+      {/* Main Net Balance & Projected Net Side-by-Side or Stacked */}
+      <div className="mb-4 space-y-2">
+        <div>
+          <p className="text-white/70 text-xs mb-0.5">Realized Net Profit</p>
+          <p className="text-white font-bold text-3xl tracking-tight leading-none">
+            {isProfit ? "+" : "−"} {formatCurrency(Math.abs(balance))}
+          </p>
+        </div>
+
+        {/* Dedicated Projected Net Profit card (Income + Upcoming IN) */}
+        {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0) && (
+          <div className="bg-white/20 backdrop-blur-md rounded-2xl p-3 border border-white/25">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p className="text-white/80 text-[10px] uppercase font-bold tracking-wider">
+                  Projected Net (Inc. Upcoming IN)
+                </p>
+                <p className="text-white text-[11px] opacity-90">
+                  Sales + Upcoming IN (₹{formatCurrency(projectedIncome)})
+                </p>
+              </div>
+              <p className="text-white font-extrabold text-lg shrink-0">
+                {isProjectedProfit ? "+" : "−"}{formatCurrency(Math.abs(projectedNet))}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Primary Stats grid: Income & Expense */}
@@ -98,7 +123,7 @@ export default function BalanceSummaryCard({
         <div className="bg-white/15 backdrop-blur-sm rounded-xl p-2.5">
           <div className="flex items-center gap-1 mb-1">
             <span className="text-white/80 text-xs">↑</span>
-            <span className="text-white/80 text-xs font-medium">Income / Sales</span>
+            <span className="text-white/80 text-xs font-medium">Sales / Income</span>
           </div>
           <p className="text-white font-bold text-sm truncate">
             {formatCurrency(totalIncome)}
