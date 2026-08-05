@@ -7,12 +7,16 @@ interface BalanceSummaryCardProps {
   totalIncome: number;
   totalExpense: number;
   balance: number;
+  upcomingCount?: number;
+  upcomingExpenseTotal?: number;
 }
 
 export default function BalanceSummaryCard({
   totalIncome,
   totalExpense,
   balance,
+  upcomingCount = 0,
+  upcomingExpenseTotal = 0,
 }: BalanceSummaryCardProps) {
   const isProfit = balance >= 0;
   const [animated, setAnimated] = useState(false);
@@ -44,7 +48,7 @@ export default function BalanceSummaryCard({
         }`}
       />
 
-      {/* Status badge */}
+      {/* Status badge + upcoming badge */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <div
@@ -58,33 +62,52 @@ export default function BalanceSummaryCard({
             {isProfit ? "You are in Profit" : "You are in Loss"}
           </span>
         </div>
-        <span className="text-white/70 text-xs">Balance</span>
+
+        {/* Upcoming payments badge */}
+        {upcomingCount > 0 && (
+          <div className="flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-xl px-2.5 py-1">
+            <span className="text-white text-xs">📅</span>
+            <div className="text-right">
+              <p className="text-white font-bold text-sm leading-none">{upcomingCount}</p>
+              <p className="text-white/70 text-[9px] leading-none mt-0.5">upcoming</p>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Main balance */}
-      <div className="mb-6">
+      <div className="mb-5">
         <p className="text-white/70 text-sm mb-1">Net Balance</p>
         <p className="text-white font-bold text-4xl tracking-tight">
-          {isProfit ? "+" : "−"} {formatCurrency(balance)}
+          {isProfit ? "+" : "−"} {formatCurrency(Math.abs(balance))}
         </p>
       </div>
 
-      {/* Income / Expense row */}
-      <div className="flex gap-4">
+      {/* Income / Expense / Upcoming row */}
+      <div className="flex gap-3">
         <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-2xl p-3">
           <div className="flex items-center gap-1 mb-1">
             <span className="text-white/80 text-xs">↑</span>
             <span className="text-white/80 text-xs font-medium">Income</span>
           </div>
-          <p className="text-white font-bold text-lg">{formatCurrency(totalIncome)}</p>
+          <p className="text-white font-bold text-base">{formatCurrency(totalIncome)}</p>
         </div>
         <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-2xl p-3">
           <div className="flex items-center gap-1 mb-1">
             <span className="text-white/80 text-xs">↓</span>
             <span className="text-white/80 text-xs font-medium">Expense</span>
           </div>
-          <p className="text-white font-bold text-lg">{formatCurrency(totalExpense)}</p>
+          <p className="text-white font-bold text-base">{formatCurrency(totalExpense)}</p>
         </div>
+        {upcomingCount > 0 && (
+          <div className="flex-1 bg-white/15 backdrop-blur-sm rounded-2xl p-3">
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-white/80 text-xs">⏳</span>
+              <span className="text-white/80 text-xs font-medium">Due Soon</span>
+            </div>
+            <p className="text-white font-bold text-base">{formatCurrency(upcomingExpenseTotal)}</p>
+          </div>
+        )}
       </div>
     </div>
   );
