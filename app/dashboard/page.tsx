@@ -12,6 +12,7 @@ import AddUpcomingForm from "@/components/AddUpcomingForm";
 import UpcomingList from "@/components/UpcomingList";
 
 import MonthlyProfitChart from "@/components/MonthlyProfitChart";
+import ExportDataPromptModal from "@/components/ExportDataPromptModal";
 
 interface Transaction {
   _id: string;
@@ -54,6 +55,7 @@ export default function DashboardPage() {
   const [upcomingLoading, setUpcomingLoading] = useState(true);
   const [error,    setError]    = useState("");
   const [activeTab, setActiveTab] = useState<TabType>("history");
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
   const fetchTransactions = useCallback(async () => {
     try {
@@ -190,6 +192,14 @@ export default function DashboardPage() {
             </h1>
           </div>
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsExportModalOpen(true)}
+              title="Export Data as AI Prompt"
+              className="px-3 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-400 text-xs font-bold border border-violet-500/30 flex items-center gap-1.5 transition-all"
+            >
+              <span>🤖</span>
+              <span>Prompt</span>
+            </button>
             <ThemeToggle />
             <button
               id="logout-btn"
@@ -319,6 +329,13 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsExportModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 text-sm font-bold transition-all duration-200 border border-violet-500/30 shadow-lg shadow-violet-600/10"
+          >
+            <span>🤖</span>
+            <span>Export AI Prompt Data</span>
+          </button>
           <ThemeToggle />
           <button
             id="logout-btn-desktop"
@@ -353,6 +370,15 @@ export default function DashboardPage() {
               totalFees={totalFees}
               totalAdSpend={totalAdSpend}
             />
+
+            {/* Quick Export Prompt Action */}
+            <button
+              onClick={() => setIsExportModalOpen(true)}
+              className="w-full flex items-center justify-center gap-2.5 px-4 py-3 rounded-2xl text-xs font-bold text-violet-300 bg-violet-950/50 hover:bg-violet-900/60 border border-violet-800/50 transition-all duration-200 shadow-md shadow-violet-950/40"
+            >
+              <span className="text-base">🤖</span>
+              <span>Generate AI Prompt Export</span>
+            </button>
 
             {/* Navigation */}
             <nav className="space-y-1">
@@ -487,6 +513,14 @@ export default function DashboardPage() {
       <div className="hidden lg:flex lg:flex-col lg:h-screen lg:overflow-hidden">
         <DesktopLayout />
       </div>
+
+      {/* AI Data Export Prompt Modal */}
+      <ExportDataPromptModal
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        transactions={transactions}
+        upcomingItems={upcomingItems}
+      />
     </>
   );
 }
