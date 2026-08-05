@@ -11,6 +11,8 @@ import CashflowGraph from "@/components/CashflowGraph";
 import AddUpcomingForm from "@/components/AddUpcomingForm";
 import UpcomingList from "@/components/UpcomingList";
 
+import MonthlyProfitChart from "@/components/MonthlyProfitChart";
+
 interface Transaction {
   _id: string;
   amount: number;
@@ -32,10 +34,11 @@ interface UpcomingItem {
   expectedDate: string;
 }
 
-type TabType = "history" | "add-income" | "add-expense" | "upcoming";
+type TabType = "history" | "analytics" | "add-income" | "add-expense" | "upcoming";
 
 const NAV_ITEMS: { id: TabType; label: string; icon: string; color: string }[] = [
   { id: "history",     label: "History",       icon: "📋", color: "slate"  },
+  { id: "analytics",   label: "Monthly Profit",icon: "📈", color: "violet" },
   { id: "add-income",  label: "Add Income",    icon: "💚", color: "emerald"},
   { id: "add-expense", label: "Add Expense",   icon: "🔴", color: "rose"   },
   { id: "upcoming",    label: "Upcoming",      icon: "📅", color: "violet" },
@@ -130,6 +133,10 @@ export default function DashboardPage() {
             <TransactionList transactions={transactions} onDelete={handleDelete} />
           )}
         </div>
+      )}
+
+      {activeTab === "analytics" && (
+        <MonthlyProfitChart transactions={transactions} />
       )}
 
       {activeTab === "add-income" && (
@@ -362,7 +369,7 @@ export default function DashboardPage() {
                         ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
                         : item.id === "add-expense"
                         ? "bg-rose-500/15 text-rose-400 border border-rose-500/20"
-                        : item.id === "upcoming"
+                        : item.id === "upcoming" || item.id === "analytics"
                         ? "bg-violet-500/15 text-violet-400 border border-violet-500/20"
                         : "bg-slate-700/50 text-white border border-slate-600/30"
                       : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
