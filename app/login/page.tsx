@@ -100,10 +100,11 @@ export default function LoginPage() {
         return;
       }
 
+      const authMethod = biometricType === "face" ? "biometric_face" : "biometric_fingerprint";
       const res = await fetch("/api/auth/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "create" }),
+        body: JSON.stringify({ action: "create", authMethod }),
       });
       if (!res.ok) throw new Error("Session creation failed");
 
@@ -136,7 +137,7 @@ export default function LoginPage() {
       const res = await fetch("/api/auth/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "create" }),
+        body: JSON.stringify({ action: "create", authMethod: "master_password" }),
       });
       if (!res.ok) throw new Error("Session creation failed");
       setStatus("success");

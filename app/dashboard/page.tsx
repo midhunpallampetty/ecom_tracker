@@ -23,6 +23,7 @@ import GstFilingModal from "@/components/GstFilingModal";
 import BudgetPanel from "@/components/BudgetPanel";
 import DueSoonNotification from "@/components/DueSoonNotification";
 import NetSpendWarningBanner from "@/components/NetSpendWarningBanner";
+import UserSessionManager from "@/components/UserSessionManager";
 
 interface Transaction {
   _id: string;
@@ -50,11 +51,12 @@ interface UpcomingItem {
   expectedDate: string;
 }
 
-type TabType = "history" | "analytics" | "add-income" | "add-expense" | "upcoming";
+type TabType = "history" | "analytics" | "security" | "add-income" | "add-expense" | "upcoming";
 
 const NAV_ITEMS: { id: TabType; label: string; icon: string; color: string }[] = [
   { id: "history",     label: "History",            icon: "📋", color: "slate"  },
   { id: "analytics",   label: "Analytics & Charts", icon: "📈", color: "violet" },
+  { id: "security",    label: "Security & Sessions",icon: "🔒", color: "cyan"   },
   { id: "add-income",  label: "Add Income",         icon: "💚", color: "emerald"},
   { id: "add-expense", label: "Add Expense",        icon: "🔴", color: "rose"   },
   { id: "upcoming",    label: "Upcoming",           icon: "📅", color: "violet" },
@@ -153,6 +155,10 @@ export default function DashboardPage() {
 
       {activeTab === "analytics" && (
         <AnalyticsHub transactions={transactions} loading={loading} />
+      )}
+
+      {activeTab === "security" && (
+        <UserSessionManager />
       )}
 
       {activeTab === "add-income" && (
@@ -507,6 +513,7 @@ export default function DashboardPage() {
                 const colors: Record<string, string> = {
                   history:     "gradient-text-violet glow-text-violet",
                   analytics:   "gradient-text-violet glow-text-violet",
+                  security:    "gradient-text-cyan glow-text-cyan",
                   "add-income":  "gradient-text-profit glow-text-emerald",
                   "add-expense": "gradient-text-loss glow-text-rose",
                   upcoming:    "gradient-text-violet glow-text-violet",
