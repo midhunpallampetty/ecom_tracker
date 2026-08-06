@@ -34,6 +34,18 @@ const CURRENCY_SYMBOLS: Record<string, string> = {
   INR: "₹", USD: "$", EUR: "€", GBP: "£", AED: "د.إ", SGD: "S$",
 };
 
+const getChannelBadgeStyle = (channel?: string) => {
+  if (!channel) return "pill-violet";
+  const ch = channel.toLowerCase();
+  if (ch.includes("meesho")) return "bg-pink-500/20 text-pink-300 border border-pink-500/30";
+  if (ch.includes("flipkart")) return "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30";
+  if (ch.includes("amazon")) return "bg-amber-500/20 text-amber-300 border border-amber-500/30";
+  if (ch.includes("own site") || ch.includes("website") || ch.includes("direct")) return "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30";
+  if (ch.includes("shopify")) return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+  if (ch.includes("woocommerce")) return "bg-purple-500/20 text-purple-300 border border-purple-500/30";
+  return "pill-violet";
+};
+
 export default function TransactionItem({ transaction, onDelete, onUpdate, style }: TransactionItemProps) {
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting]       = useState(false);
@@ -89,7 +101,7 @@ export default function TransactionItem({ transaction, onDelete, onUpdate, style
               </span>
             )}
             {transaction.channel && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full pill-violet shrink-0">
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${getChannelBadgeStyle(transaction.channel)}`}>
                 {transaction.channel}
               </span>
             )}

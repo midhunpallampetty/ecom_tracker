@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import ChannelOrderTracker from "./ChannelOrderTracker";
 import MonthlyProfitChart from "./MonthlyProfitChart";
 import ExpenseLeakageChart from "./ExpenseLeakageChart";
 import ChannelPerformanceChart from "./ChannelPerformanceChart";
@@ -17,6 +18,7 @@ interface Transaction {
   cogs?: number;
   platformFee?: number;
   adSpend?: number;
+  orderId?: string;
   createdAt: string;
 }
 
@@ -25,9 +27,10 @@ interface AnalyticsHubProps {
   loading?: boolean;
 }
 
-type AnalyticsSubTab = "monthly" | "leakage" | "channels" | "improvement";
+type AnalyticsSubTab = "orders" | "monthly" | "leakage" | "channels" | "improvement";
 
 const SUB_TABS: { id: AnalyticsSubTab; label: string; icon: string; badge?: string }[] = [
+  { id: "orders", label: "Order & Platform Tracker", icon: "📦", badge: "Meesho/FK/Amazon" },
   { id: "monthly", label: "Profit Trend", icon: "📈" },
   { id: "leakage", label: "Loss Leakage", icon: "🥧", badge: "Diagnostic" },
   { id: "channels", label: "Channel Matrix", icon: "🏬" },
@@ -35,7 +38,7 @@ const SUB_TABS: { id: AnalyticsSubTab; label: string; icon: string; badge?: stri
 ];
 
 export default function AnalyticsHub({ transactions, loading = false }: AnalyticsHubProps) {
-  const [activeSubTab, setActiveSubTab] = useState<AnalyticsSubTab>("monthly");
+  const [activeSubTab, setActiveSubTab] = useState<AnalyticsSubTab>("orders");
 
   if (loading) {
     return <MonthlyProfitChartSkeleton />;
@@ -84,6 +87,7 @@ export default function AnalyticsHub({ transactions, loading = false }: Analytic
 
       {/* ── Active Chart View Content ── */}
       <div>
+        {activeSubTab === "orders" && <ChannelOrderTracker transactions={transactions} />}
         {activeSubTab === "monthly" && <MonthlyProfitChart transactions={transactions} />}
         {activeSubTab === "leakage" && <ExpenseLeakageChart transactions={transactions} />}
         {activeSubTab === "channels" && <ChannelPerformanceChart transactions={transactions} />}

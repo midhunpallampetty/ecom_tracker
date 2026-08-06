@@ -31,8 +31,17 @@ interface EditTransactionModalProps {
 }
 
 const ECOM_CHANNELS = [
-  "Shopify", "Amazon", "Etsy", "WooCommerce",
-  "Meta Ads", "Google Ads", "Direct / Offline", "Other",
+  "Meesho",
+  "Flipkart",
+  "Amazon",
+  "Own Site / Website",
+  "Shopify",
+  "WooCommerce",
+  "Etsy",
+  "Meta Ads",
+  "Google Ads",
+  "Direct / Offline",
+  "Other",
 ];
 
 const CURRENCIES = [

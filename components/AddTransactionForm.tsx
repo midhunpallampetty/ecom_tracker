@@ -9,7 +9,19 @@ interface AddTransactionFormProps {
   onSuccess: () => void;
 }
 
-const ECOM_CHANNELS = ["Shopify", "Amazon", "Etsy", "WooCommerce", "Meta Ads", "Google Ads", "Direct / Offline", "Other"];
+const ECOM_CHANNELS = [
+  "Meesho",
+  "Flipkart",
+  "Amazon",
+  "Own Site / Website",
+  "Shopify",
+  "WooCommerce",
+  "Etsy",
+  "Meta Ads",
+  "Google Ads",
+  "Direct / Offline",
+  "Other",
+];
 
 const CURRENCIES = [
   { code: "INR", symbol: "₹" },
