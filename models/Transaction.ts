@@ -11,6 +11,11 @@ export interface ITransaction extends Document {
   adSpend?: number;
   gstRate?: number;
   gstAmount?: number;
+  orderId?: string;
+  currency?: string;
+  currencyRate?: number;
+  isRecurring?: boolean;
+  recurringPeriod?: "weekly" | "monthly" | "quarterly";
   createdAt: Date;
 }
 
@@ -66,6 +71,30 @@ const TransactionSchema: Schema = new Schema(
       type: Number,
       default: 0,
       min: 0,
+    },
+    orderId: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    currency: {
+      type: String,
+      default: "INR",
+      trim: true,
+    },
+    currencyRate: {
+      type: Number,
+      default: 1,
+      min: 0,
+    },
+    isRecurring: {
+      type: Boolean,
+      default: false,
+    },
+    recurringPeriod: {
+      type: String,
+      enum: ["weekly", "monthly", "quarterly", ""],
+      default: "",
     },
   },
   {

@@ -20,6 +20,8 @@ import {
 import AnalyticsHub from "@/components/AnalyticsHub";
 import ExportDataPromptModal from "@/components/ExportDataPromptModal";
 import GstFilingModal from "@/components/GstFilingModal";
+import BudgetPanel from "@/components/BudgetPanel";
+import DueSoonNotification from "@/components/DueSoonNotification";
 
 interface Transaction {
   _id: string;
@@ -31,6 +33,11 @@ interface Transaction {
   cogs?: number;
   platformFee?: number;
   adSpend?: number;
+  orderId?: string;
+  currency?: string;
+  currencyRate?: number;
+  isRecurring?: boolean;
+  recurringPeriod?: string;
   createdAt: string;
 }
 
@@ -89,6 +96,7 @@ export default function DashboardPage() {
 
   const handleTransactionAdded = () => { setLoading(true); fetchTransactions(); setActiveTab("history"); };
   const handleDelete            = (id: string) => setTransactions(p => p.filter(t => t._id !== id));
+  const handleUpdate            = (updated: Transaction) => setTransactions(p => p.map(t => t._id === updated._id ? updated : t));
   const handleUpcomingAdded    = () => { fetchUpcoming(); setActiveTab("upcoming"); };
   const handleUpcomingDelete   = (id: string) => setUpcomingItems(p => p.filter(u => u._id !== id));
 
@@ -137,7 +145,7 @@ export default function DashboardPage() {
               </button>
             </div>
           ) : (
-            <TransactionList transactions={transactions} onDelete={handleDelete} />
+            <TransactionList transactions={transactions} onDelete={handleDelete} onUpdate={handleUpdate} />
           )}
         </div>
       )}
@@ -183,6 +191,7 @@ export default function DashboardPage() {
   const MobileLayout = () => (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       <div className="max-w-md mx-auto min-h-screen flex flex-col">
+        <DueSoonNotification upcomingItems={upcomingItems} />
         {/* Header */}
         <header className="px-5 pt-12 pb-4 flex items-center justify-between">
           <div>
@@ -380,6 +389,7 @@ export default function DashboardPage() {
         {/* ──────── LEFT SIDEBAR ──────── */}
         <aside className="w-72 shrink-0 border-r border-slate-800 bg-slate-950 flex flex-col overflow-y-auto">
           <div className="p-5 space-y-4">
+            <DueSoonNotification upcomingItems={upcomingItems} />
             {/* Balance card */}
             <BalanceSummaryCard
               totalIncome={totalIncome}
@@ -393,6 +403,9 @@ export default function DashboardPage() {
               totalAdSpend={totalAdSpend}
               loading={loading}
             />
+
+            {/* Budget Panel */}
+            <BudgetPanel totalIncome={totalIncome} totalExpense={totalExpense} />
 
             {/* Quick Action Buttons */}
             <div className="space-y-2">
