@@ -190,24 +190,24 @@ export default function DashboardPage() {
      MOBILE LAYOUT  (< lg)
   ══════════════════════════════════════════════════════════════════ */
   const MobileLayout = () => (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="max-w-md mx-auto min-h-screen flex flex-col">
+    <div className="min-h-screen web3-bg text-slate-100 transition-colors duration-300">
+      <div className="max-w-md mx-auto min-h-screen flex flex-col relative z-10">
         <DueSoonNotification upcomingItems={upcomingItems} />
         {/* Header */}
         <header className="px-5 pt-12 pb-4 flex items-center justify-between">
           <div>
-            <p className="text-slate-400 dark:text-slate-500 text-xs font-medium uppercase tracking-widest mb-0.5">
-              Personal Finance
+            <p className="text-violet-400 text-xs font-medium uppercase tracking-widest mb-0.5">
+              eCommerce Analytics
             </p>
-            <h1 className="text-slate-800 dark:text-white font-bold text-2xl tracking-tight">
-              My Wallet 💼
+            <h1 className="text-white font-extrabold text-2xl tracking-tight gradient-text-violet glow-text-violet">
+              eCom Tracker 🚀
             </h1>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsGstModalOpen(true)}
               title="GST Filing & Tax Calculator"
-              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 text-xs font-bold border border-amber-500/30 flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 rounded-xl pill-amber text-xs font-bold flex items-center gap-1.5 transition-all"
             >
               <span>🏛️</span>
               <span>GST</span>
@@ -215,17 +215,16 @@ export default function DashboardPage() {
             <button
               onClick={() => setIsExportModalOpen(true)}
               title="Export Data as AI Prompt"
-              className="px-3 py-1.5 rounded-xl bg-violet-500/20 hover:bg-violet-500/30 text-violet-400 text-xs font-bold border border-violet-500/30 flex items-center gap-1.5 transition-all"
+              className="px-3 py-1.5 rounded-xl pill-violet text-xs font-bold flex items-center gap-1.5 transition-all"
             >
               <span>🤖</span>
               <span>Prompt</span>
             </button>
-            <ThemeToggle />
             <button
               id="logout-btn"
               onClick={handleLogout}
               title="Logout"
-              className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-slate-500 dark:text-slate-400 hover:text-rose-500 dark:hover:text-rose-400 flex items-center justify-center transition-all duration-200"
+              className="w-9 h-9 rounded-xl glass text-slate-400 hover:text-rose-400 flex items-center justify-center transition-all duration-200"
             >
               <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -294,17 +293,19 @@ export default function DashboardPage() {
      DESKTOP LAYOUT  (≥ lg)
   ══════════════════════════════════════════════════════════════════ */
   const DesktopLayout = () => (
-    <div className="min-h-screen bg-slate-950 flex flex-col">
+    <div className="min-h-screen web3-bg text-slate-100 flex flex-col relative z-10">
 
       {/* ── Top header bar ── */}
-      <header className="flex items-center justify-between px-8 py-4 border-b border-slate-800 bg-slate-950 sticky top-0 z-30">
+      <header className="flex items-center justify-between px-8 py-4 border-b border-violet-500/20 glass backdrop-blur-xl sticky top-0 z-30">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-lg shadow-lg shadow-emerald-500/20">
-            💼
+          <div className="w-10 h-10 rounded-2xl glass-cyan flex items-center justify-center text-xl glow-cyan">
+            🚀
           </div>
           <div>
-            <h1 className="text-white font-bold text-lg tracking-tight leading-none">eCom Tracker</h1>
-            <p className="text-slate-500 text-xs">Sales & Cashflow</p>
+            <h1 className="text-white font-extrabold text-lg tracking-tight leading-none gradient-text-violet glow-text-violet">
+              eCom Tracker
+            </h1>
+            <p className="text-cyan-400 text-xs font-semibold">Web3 Finance Engine</p>
           </div>
         </div>
 
@@ -312,39 +313,39 @@ export default function DashboardPage() {
         {loading || upcomingLoading ? (
           <HeaderStatsSkeleton />
         ) : (
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 glass px-6 py-2 rounded-2xl border-violet-500/20">
             <div className="text-center">
-              <p className="text-slate-500 text-xs uppercase tracking-wider">Balance</p>
-              <p className={`font-bold text-lg ${balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Balance</p>
+              <p className={`font-extrabold text-lg ${balance >= 0 ? "gradient-text-profit glow-text-emerald" : "gradient-text-loss glow-text-rose"}`}>
                 {balance >= 0 ? "+" : "−"}₹{Math.abs(balance).toLocaleString("en-IN")}
               </p>
             </div>
             <div className="w-px h-8 bg-slate-800" />
             <div className="text-center">
-              <p className="text-slate-500 text-xs uppercase tracking-wider">Sales / Income</p>
-              <p className="font-bold text-lg text-emerald-400">₹{totalIncome.toLocaleString("en-IN")}</p>
+              <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Sales / Income</p>
+              <p className="font-extrabold text-lg text-emerald-400 glow-text-emerald">₹{totalIncome.toLocaleString("en-IN")}</p>
             </div>
             <div className="w-px h-8 bg-slate-800" />
             <div className="text-center">
-              <p className="text-slate-500 text-xs uppercase tracking-wider">Expenses</p>
-              <p className="font-bold text-lg text-rose-400">₹{totalExpense.toLocaleString("en-IN")}</p>
+              <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Expenses</p>
+              <p className="font-extrabold text-lg text-rose-400 glow-text-rose">₹{totalExpense.toLocaleString("en-IN")}</p>
             </div>
             <div className="w-px h-8 bg-slate-800" />
             <div className="text-center">
-              <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming In</p>
-              <p className="font-bold text-lg text-emerald-400">₹{upcomingIncomeTotal.toLocaleString("en-IN")}</p>
+              <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Upcoming In</p>
+              <p className="font-extrabold text-lg text-cyan-400">₹{upcomingIncomeTotal.toLocaleString("en-IN")}</p>
             </div>
             <div className="w-px h-8 bg-slate-800" />
             <div className="text-center">
-              <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming Out</p>
-              <p className="font-bold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
+              <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Upcoming Out</p>
+              <p className="font-extrabold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
             </div>
             {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0) && (
               <>
                 <div className="w-px h-8 bg-slate-800" />
                 <div className="text-center">
-                  <p className="text-violet-400 text-xs uppercase font-bold tracking-wider">Projected Net</p>
-                  <p className={`font-bold text-lg ${ (balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "text-emerald-400" : "text-rose-400" }`}>
+                  <p className="text-violet-400 text-[10px] uppercase font-bold tracking-wider">Projected Net</p>
+                  <p className={`font-extrabold text-lg ${ (balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "text-cyan-400" : "text-rose-400" }`}>
                     {(balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "+" : "−"}₹{Math.abs(balance + upcomingIncomeTotal - upcomingExpenseTotal).toLocaleString("en-IN")}
                   </p>
                 </div>
@@ -356,23 +357,22 @@ export default function DashboardPage() {
         <div className="flex items-center gap-3">
           <button
             onClick={() => setIsGstModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-sm font-bold transition-all duration-200 border border-amber-500/30 shadow-lg shadow-amber-500/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl pill-amber text-sm font-bold transition-all duration-200"
           >
             <span>🏛️</span>
             <span>GST Filing Vault</span>
           </button>
           <button
             onClick={() => setIsExportModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-600/20 hover:bg-violet-600/30 text-violet-300 text-sm font-bold transition-all duration-200 border border-violet-500/30 shadow-lg shadow-violet-600/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl pill-violet text-sm font-bold transition-all duration-200"
           >
             <span>🤖</span>
             <span>Export AI Prompt Data</span>
           </button>
-          <ThemeToggle />
           <button
             id="logout-btn-desktop"
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-rose-900/30 text-slate-400 hover:text-rose-400 text-sm font-medium transition-all duration-200 border border-slate-700 hover:border-rose-500/30"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl glass hover:border-rose-500/40 text-slate-400 hover:text-rose-400 text-sm font-medium transition-all duration-200"
           >
             <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -388,7 +388,7 @@ export default function DashboardPage() {
       <div className="flex flex-1 overflow-hidden">
 
         {/* ──────── LEFT SIDEBAR ──────── */}
-        <aside className="w-72 shrink-0 border-r border-slate-800 bg-slate-950 flex flex-col overflow-y-auto">
+        <aside className="w-72 shrink-0 border-r border-violet-500/20 glass backdrop-blur-xl flex flex-col overflow-y-auto">
           <div className="p-5 space-y-4">
             <DueSoonNotification upcomingItems={upcomingItems} />
             {/* Balance card */}
@@ -412,14 +412,14 @@ export default function DashboardPage() {
             <div className="space-y-2">
               <button
                 onClick={() => setIsGstModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold text-amber-300 bg-amber-950/50 hover:bg-amber-900/60 border border-amber-800/50 transition-all duration-200 shadow-md shadow-amber-950/40"
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold pill-amber transition-all duration-200"
               >
                 <span className="text-base">🏛️</span>
                 <span>GST & Tax Filing Vault</span>
               </button>
               <button
                 onClick={() => setIsExportModalOpen(true)}
-                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold text-violet-300 bg-violet-950/50 hover:bg-violet-900/60 border border-violet-800/50 transition-all duration-200 shadow-md shadow-violet-950/40"
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-2xl text-xs font-bold pill-violet transition-all duration-200"
               >
                 <span className="text-base">🤖</span>
                 <span>Generate AI Prompt Export</span>
@@ -428,7 +428,7 @@ export default function DashboardPage() {
 
             {/* Navigation */}
             <nav className="space-y-1">
-              <p className="text-slate-600 text-xs font-semibold uppercase tracking-widest px-3 mb-3">
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest px-3 mb-3">
                 Navigation
               </p>
               {NAV_ITEMS.map((item) => (
@@ -438,13 +438,13 @@ export default function DashboardPage() {
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all duration-200 text-left relative ${
                     activeTab === item.id
                       ? item.id === "add-income"
-                        ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"
+                        ? "glass-emerald text-emerald-400 font-bold border-emerald-500/40 glow-emerald"
                         : item.id === "add-expense"
-                        ? "bg-rose-500/15 text-rose-400 border border-rose-500/20"
+                        ? "glass-rose text-rose-400 font-bold border-rose-500/40 glow-rose"
                         : item.id === "upcoming" || item.id === "analytics"
-                        ? "bg-violet-500/15 text-violet-400 border border-violet-500/20"
-                        : "bg-slate-700/50 text-white border border-slate-600/30"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
+                        ? "glass-cyan text-cyan-400 font-bold border-cyan-500/40 glow-cyan"
+                        : "glass text-white font-bold border-violet-500/40 glow-violet"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent"
                   }`}
                 >
                   <span className="text-lg leading-none">{item.icon}</span>
@@ -465,20 +465,20 @@ export default function DashboardPage() {
             {upcomingLoading ? (
               <SidebarUpcomingSkeleton />
             ) : upcomingItems.length > 0 ? (
-              <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
-                <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-3">
+              <div className="glass rounded-2xl border-violet-500/20 p-4">
+                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-3">
                   Next Due
                 </p>
                 <div className="space-y-2">
                   {upcomingItems.slice(0, 3).map((u) => {
                     const d = new Date(u.expectedDate);
                     const diff = Math.ceil((d.getTime() - new Date().setHours(0,0,0,0)) / 86400000);
-                    const urgency = diff < 0 ? "text-rose-400" : diff === 0 ? "text-amber-400" : diff <= 3 ? "text-violet-400" : "text-slate-400";
+                    const urgency = diff < 0 ? "text-rose-400 glow-text-rose" : diff === 0 ? "text-amber-400" : diff <= 3 ? "text-cyan-400" : "text-slate-400";
                     return (
                       <div key={u._id} className="flex items-center justify-between gap-2">
                         <div className="flex items-center gap-2 min-w-0">
-                          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${u.type === "income" ? "bg-emerald-400" : "bg-rose-400"}`} />
-                          <p className="text-slate-300 text-xs truncate">{u.description || u.type}</p>
+                          <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${u.type === "income" ? "bg-emerald-400 shadow-[0_0_6px_#10e89b]" : "bg-rose-400 shadow-[0_0_6px_#f43f5e]"}`} />
+                          <p className="text-slate-200 text-xs truncate">{u.description || u.type}</p>
                         </div>
                         <p className={`text-xs font-bold shrink-0 ${urgency}`}>
                           {diff < 0 ? `${Math.abs(diff)}d ago` : diff === 0 ? "Today" : `${diff}d`}
@@ -487,7 +487,7 @@ export default function DashboardPage() {
                     );
                   })}
                   {upcomingItems.length > 3 && (
-                    <button onClick={() => setActiveTab("upcoming")} className="text-violet-400 text-xs font-medium hover:underline">
+                    <button onClick={() => setActiveTab("upcoming")} className="text-cyan-400 text-xs font-medium hover:underline">
                       +{upcomingItems.length - 3} more →
                     </button>
                   )}
@@ -498,26 +498,27 @@ export default function DashboardPage() {
         </aside>
 
         {/* ──────── MAIN CONTENT ──────── */}
-        <main className="flex-1 overflow-y-auto bg-slate-50 dark:bg-slate-950">
+        <main className="flex-1 overflow-y-auto web3-bg">
           <div className="p-8 max-w-4xl">
             {/* Page title */}
             <div className="mb-6">
               {(() => {
                 const item = NAV_ITEMS.find(n => n.id === activeTab)!;
                 const colors: Record<string, string> = {
-                  history:     "text-slate-200",
-                  "add-income":  "text-emerald-400",
-                  "add-expense": "text-rose-400",
-                  upcoming:    "text-violet-400",
+                  history:     "gradient-text-violet glow-text-violet",
+                  analytics:   "gradient-text-violet glow-text-violet",
+                  "add-income":  "gradient-text-profit glow-text-emerald",
+                  "add-expense": "gradient-text-loss glow-text-rose",
+                  upcoming:    "gradient-text-violet glow-text-violet",
                 };
                 return (
                   <div className="flex items-center gap-3">
                     <span className="text-2xl">{item.icon}</span>
-                    <h2 className={`font-bold text-2xl ${colors[activeTab]}`}>{item.label}</h2>
+                    <h2 className={`font-extrabold text-2xl ${colors[activeTab]}`}>{item.label}</h2>
                   </div>
                 );
               })()}
-              <div className="h-px bg-slate-800 mt-4" />
+              <div className="h-px bg-violet-500/20 mt-4" />
             </div>
 
             <MainContent />
@@ -525,10 +526,10 @@ export default function DashboardPage() {
         </main>
 
         {/* ──────── RIGHT PANEL ──────── */}
-        <aside className="w-80 shrink-0 border-l border-slate-800 bg-slate-950 overflow-y-auto">
+        <aside className="w-80 shrink-0 border-l border-violet-500/20 glass backdrop-blur-xl overflow-y-auto">
           <div className="p-5 space-y-5">
             <div>
-              <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-3">
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-3">
                 Cashflow · 6 Months
               </p>
               <CashflowGraph transactions={transactions} loading={loading} />
@@ -536,7 +537,7 @@ export default function DashboardPage() {
 
             {/* Quick add upcoming — right panel shortcut */}
             <div>
-              <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-3">
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-3">
                 Schedule Payment
               </p>
               <AddUpcomingForm onSuccess={handleUpcomingAdded} />

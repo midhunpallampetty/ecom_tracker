@@ -99,20 +99,20 @@ export default function AddTransactionForm({ type, onSuccess }: AddTransactionFo
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border dark:border-slate-800 p-5">
+    <div className="glass rounded-3xl p-5 border-violet-500/20 shadow-xl">
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-3">
-          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-white font-bold text-lg ${
-            isIncome ? "bg-gradient-to-br from-emerald-400 to-emerald-600" : "bg-gradient-to-br from-rose-400 to-rose-600"
+          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-lg ${
+            isIncome ? "glass-emerald text-emerald-400 glow-emerald" : "glass-rose text-rose-400 glow-rose"
           }`}>
             {isIncome ? "+" : "−"}
           </div>
           <div>
-            <h3 className={`font-bold text-base ${isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+            <h3 className={`font-bold text-base ${isIncome ? "text-emerald-400 glow-text-emerald" : "text-rose-400 glow-text-rose"}`}>
               {isIncome ? "Add Sales / Income" : "Add Expense"}
             </h3>
-            <p className="text-slate-400 dark:text-slate-500 text-xs">
+            <p className="text-slate-400 text-xs">
               {isIncome ? "Record eCommerce sale or revenue" : "Record business expense"}
             </p>
           </div>

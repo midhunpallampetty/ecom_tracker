@@ -78,29 +78,29 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
     <div className="space-y-4">
       {/* Header Summary Cards for Total Upcoming In & Out */}
       <div className="grid grid-cols-3 gap-2">
-        <div className="p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/40 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-0.5">
+        <div className="p-3 rounded-2xl glass-emerald text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-400 mb-0.5">
             Upcoming IN
           </p>
-          <p className="font-bold text-sm text-emerald-700 dark:text-emerald-300">
+          <p className="font-bold text-sm text-emerald-300 glow-text-emerald">
             +{formatCurrency(totalUpcomingIn)}
           </p>
         </div>
 
-        <div className="p-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/40 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-0.5">
+        <div className="p-3 rounded-2xl glass-rose text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-400 mb-0.5">
             Upcoming OUT
           </p>
-          <p className="font-bold text-sm text-rose-700 dark:text-rose-300">
+          <p className="font-bold text-sm text-rose-300 glow-text-rose">
             −{formatCurrency(totalUpcomingOut)}
           </p>
         </div>
 
-        <div className="p-3 rounded-2xl bg-violet-50 dark:bg-violet-950/40 border border-violet-200 dark:border-violet-800/40 text-center">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-0.5">
+        <div className="p-3 rounded-2xl glass-cyan text-center">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-400 mb-0.5">
             Net Expected
           </p>
-          <p className={`font-bold text-sm ${netUpcoming >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-rose-600 dark:text-rose-400"}`}>
+          <p className={`font-bold text-sm ${netUpcoming >= 0 ? "text-emerald-400 glow-text-emerald" : "text-rose-400 glow-text-rose"}`}>
             {netUpcoming >= 0 ? "+" : "−"}{formatCurrency(Math.abs(netUpcoming))}
           </p>
         </div>
@@ -113,28 +113,26 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
 
         /* ── urgency-based palette ── */
         const cardBg =
-          urgency === "overdue" ? "bg-rose-50 dark:bg-rose-500/10 border-rose-200 dark:border-rose-500/25" :
-          urgency === "today"   ? "bg-amber-50 dark:bg-amber-500/10 border-amber-200 dark:border-amber-500/25" :
-          urgency === "soon"    ? "bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-500/25" :
-                                  "bg-white dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60";
+          urgency === "overdue" ? "glass-rose border-rose-500/40 glow-rose" :
+          urgency === "today"   ? "glass border-amber-500/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]" :
+          urgency === "soon"    ? "glass-cyan border-cyan-500/30" :
+                                  "glass border-violet-500/20";
 
         const pillBg =
-          urgency === "overdue" ? "bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-300" :
-          urgency === "today"   ? "bg-amber-100 dark:bg-amber-500/20 text-amber-700 dark:text-amber-300" :
-          urgency === "soon"    ? "bg-violet-100 dark:bg-violet-500/20 text-violet-700 dark:text-violet-300" :
-                                  "bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-400";
+          urgency === "overdue" ? "pill-rose" :
+          urgency === "today"   ? "pill-amber" :
+          urgency === "soon"    ? "pill-cyan" :
+                                  "pill-violet";
 
         return (
           <div
             key={item._id}
-            className={`flex items-center gap-3 p-4 rounded-2xl border transition-all duration-200 shadow-sm ${cardBg}`}
+            className={`flex items-center gap-3 p-4 rounded-2xl border transition-all duration-200 ${cardBg}`}
           >
             {/* Type icon */}
             <div
               className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-base font-bold ${
-                isIncome
-                  ? "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400"
-                  : "bg-rose-100 dark:bg-rose-500/20 text-rose-600 dark:text-rose-400"
+                isIncome ? "glass-emerald text-emerald-400" : "glass-rose text-rose-400"
               }`}
             >
               {isIncome ? "↑" : "↓"}
@@ -142,14 +140,14 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
 
             {/* Description + date */}
             <div className="flex-1 min-w-0">
-              <p className="text-slate-800 dark:text-slate-100 text-sm font-semibold truncate">
+              <p className="text-slate-100 text-sm font-semibold truncate">
                 {item.description || (isIncome ? "Income" : "Expense")}
               </p>
               <div className="flex items-center gap-2 mt-1">
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${pillBg}`}>
                   {label}
                 </span>
-                <span className="text-slate-400 dark:text-slate-500 text-xs">
+                <span className="text-slate-400 text-xs">
                   {isIncome ? "Expected income" : "Due payment"}
                 </span>
               </div>
@@ -160,8 +158,8 @@ export default function UpcomingList({ items, onDelete }: UpcomingListProps) {
               <p
                 className={`font-bold text-sm ${
                   isIncome
-                    ? "text-emerald-600 dark:text-emerald-400"
-                    : "text-rose-600 dark:text-rose-400"
+                    ? "text-emerald-400 glow-text-emerald"
+                    : "text-rose-400 glow-text-rose"
                 }`}
               >
                 {isIncome ? "+" : "−"}{formatCurrency(item.amount)}

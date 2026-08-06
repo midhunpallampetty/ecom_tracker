@@ -38,28 +38,28 @@ export default function NetSpendWarningBanner({ totalIncome, totalExpense }: Net
 
   return (
     <div className="sticky top-0 z-50 w-full animate-in slide-in-from-bottom duration-300">
-      <div className="bg-rose-600 dark:bg-rose-700 text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-lg shadow-rose-900/30">
+      <div className="glass-rose backdrop-blur-xl border-b border-rose-500/50 text-white px-4 py-2.5 flex items-center justify-between gap-3 shadow-[0_4px_30px_rgba(244,63,94,0.35)] glow-rose">
         <div className="flex items-center gap-2.5 min-w-0">
-          <span className="text-lg shrink-0">🚫</span>
+          <span className="text-lg shrink-0 animate-bounce">🚫</span>
           <div className="min-w-0">
-            <p className="text-xs font-bold leading-tight">
-              Net spend limit reached!
+            <p className="text-xs font-bold leading-tight flex items-center gap-2 text-rose-300 glow-text-rose">
+              <span>Net Spend Limit Exceeded!</span>
               {overBy > 0 && (
-                <span className="ml-1.5 bg-rose-500/60 px-2 py-0.5 rounded-full text-[10px] font-bold">
+                <span className="pill-rose text-[10px] font-bold">
                   ₹{overBy.toLocaleString("en-IN")} over
                 </span>
               )}
             </p>
-            <p className="text-[10px] text-rose-100 truncate">
-              Net spend ₹{netSpend.toLocaleString("en-IN")} (₹{totalExpense.toLocaleString("en-IN")} − ₹{totalIncome.toLocaleString("en-IN")}) exceeded limit of ₹{expenseLimit.toLocaleString("en-IN")}.
-              {" "}Earn ₹{overBy.toLocaleString("en-IN")} more to unlock spending.
+            <p className="text-[10px] text-slate-300 truncate">
+              Net spend ₹{netSpend.toLocaleString("en-IN")} (₹{totalExpense.toLocaleString("en-IN")} − ₹{totalIncome.toLocaleString("en-IN")}) hit limit ₹{expenseLimit.toLocaleString("en-IN")}.
+              {" "}Earn ₹{overBy.toLocaleString("en-IN")} to unlock.
             </p>
           </div>
         </div>
         <button
           onClick={() => setDismissed(true)}
           aria-label="Dismiss warning"
-          className="shrink-0 w-7 h-7 rounded-lg bg-rose-500/50 hover:bg-rose-500/80 flex items-center justify-center text-white text-xs transition-colors"
+          className="shrink-0 w-7 h-7 rounded-lg glass-rose hover:bg-rose-500/30 flex items-center justify-center text-rose-300 text-xs transition-colors"
         >
           ✕
         </button>

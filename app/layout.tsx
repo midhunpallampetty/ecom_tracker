@@ -10,44 +10,30 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "My Wallet — Personal Finance Tracker",
-  description:
-    "Track your personal income and expenses with a beautiful, mobile-first finance app.",
-  keywords: ["finance", "tracker", "income", "expense", "budget", "wallet"],
+  title: "eCom Tracker — Web3 Finance Dashboard",
+  description: "Track eCommerce income, expenses, and profit with a premium Web3 finance dashboard.",
+  keywords: ["finance", "tracker", "ecommerce", "income", "expense", "budget", "web3"],
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "My Wallet",
-  },
-  formatDetection: {
-    telephone: false,
-  },
+  appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: "eCom Tracker" },
+  formatDetection: { telephone: false },
   openGraph: {
     type: "website",
-    title: "My Wallet — Personal Finance Tracker",
-    description: "Track your personal income and expenses beautifully.",
+    title: "eCom Tracker — Web3 Finance Dashboard",
+    description: "Premium eCommerce finance analytics.",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#020617" },
-  ],
+  themeColor: "#080b14",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <head>
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
@@ -56,8 +42,8 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
+          forcedTheme="dark"
           disableTransitionOnChange={false}
         >
           {children}

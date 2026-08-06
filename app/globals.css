@@ -1,28 +1,49 @@
 @import "tailwindcss";
 
-/* Tailwind v4: configure dark mode to use the 'class' strategy */
+/* Tailwind v4: dark mode via class */
 @variant dark (&:where(.dark, .dark *));
 
-/* ─────────────────────────────────────────
-   CSS Custom Properties / Design Tokens
-───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   WEB3 DESIGN TOKENS
+═══════════════════════════════════════════════ */
 :root {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --radius-card: 1.5rem;
+
+  /* Backgrounds */
+  --bg-base:    #080b14;
+  --bg-surface: #0d1120;
+  --bg-card:    rgba(255, 255, 255, 0.03);
+
+  /* Neon palette */
+  --cyan:    #00d4ff;
+  --violet:  #8b5cf6;
+  --emerald: #10e89b;
+  --rose:    #f43f5e;
+  --amber:   #f59e0b;
+
+  /* Borders */
+  --border-default: rgba(139, 92, 246, 0.2);
+  --border-cyan:    rgba(0, 212, 255, 0.25);
+  --border-emerald: rgba(16, 232, 155, 0.25);
+  --border-rose:    rgba(244, 63, 94, 0.25);
+
+  /* Glows */
+  --glow-cyan:    0 0 24px rgba(0, 212, 255, 0.35), 0 0 60px rgba(0, 212, 255, 0.1);
+  --glow-violet:  0 0 24px rgba(139, 92, 246, 0.45), 0 0 60px rgba(139, 92, 246, 0.15);
+  --glow-emerald: 0 0 24px rgba(16, 232, 155, 0.35), 0 0 60px rgba(16, 232, 155, 0.1);
+  --glow-rose:    0 0 24px rgba(244, 63, 94, 0.4),   0 0 60px rgba(244, 63, 94, 0.12);
 }
 
-/* ─────────────────────────────────────────
-   Base reset & mobile optimizations
-───────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+/* ═══════════════════════════════════════════════
+   BASE
+═══════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
 
 html {
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -30,17 +51,233 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overscroll-behavior-y: none;
+  background-color: var(--bg-base);
+  color: #f1f5f9;
 }
 
-/* Prevent text size inflation on mobile rotation */
-html {
-  text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
+/* ═══════════════════════════════════════════════
+   MESH GRID BACKGROUND
+═══════════════════════════════════════════════ */
+.web3-bg {
+  background-color: var(--bg-base);
+  background-image:
+    linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
 }
 
-/* ─────────────────────────────────────────
-   Animations
-───────────────────────────────────────── */
+.web3-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 10%, rgba(139, 92, 246, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   GLASS CARD
+═══════════════════════════════════════════════ */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+}
+
+.glass-cyan {
+  background: rgba(0, 212, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.glass-emerald {
+  background: rgba(16, 232, 155, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(16, 232, 155, 0.2);
+}
+
+.glass-rose {
+  background: rgba(244, 63, 94, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+/* ═══════════════════════════════════════════════
+   GLOW UTILITIES
+═══════════════════════════════════════════════ */
+.glow-cyan    { box-shadow: var(--glow-cyan); }
+.glow-violet  { box-shadow: var(--glow-violet); }
+.glow-emerald { box-shadow: var(--glow-emerald); }
+.glow-rose    { box-shadow: var(--glow-rose); }
+
+.glow-text-cyan    { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8); }
+.glow-text-emerald { text-shadow: 0 0 20px rgba(16, 232, 155, 0.8); }
+.glow-text-violet  { text-shadow: 0 0 20px rgba(139, 92, 246, 0.8); }
+.glow-text-rose    { text-shadow: 0 0 20px rgba(244, 63, 94, 0.8); }
+
+/* ═══════════════════════════════════════════════
+   GRADIENT TEXT
+═══════════════════════════════════════════════ */
+.gradient-text-profit {
+  background: linear-gradient(135deg, #10e89b 0%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-loss {
+  background: linear-gradient(135deg, #f43f5e 0%, #fb923c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-violet {
+  background: linear-gradient(135deg, #a78bfa 0%, #00d4ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════════════════════════════════════════
+   NEON BUTTONS
+═══════════════════════════════════════════════ */
+.btn-neon-emerald {
+  background: linear-gradient(135deg, #10e89b, #00d4ff);
+  color: #080b14;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(16, 232, 155, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-neon-emerald:hover {
+  box-shadow: 0 0 32px rgba(16, 232, 155, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-neon-rose {
+  background: linear-gradient(135deg, #f43f5e, #fb7185);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(244, 63, 94, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-neon-rose:hover {
+  box-shadow: 0 0 32px rgba(244, 63, 94, 0.6), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-neon-violet {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.45), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+.btn-neon-violet:hover {
+  box-shadow: 0 0 32px rgba(139, 92, 246, 0.65), 0 4px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ═══════════════════════════════════════════════
+   NEON PILL BADGES
+═══════════════════════════════════════════════ */
+.pill-cyan    { background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: #00d4ff; }
+.pill-emerald { background: rgba(16, 232, 155, 0.1); border: 1px solid rgba(16, 232, 155, 0.3); color: #10e89b; }
+.pill-rose    { background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); color: #f43f5e; }
+.pill-violet  { background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); color: #a78bfa; }
+.pill-amber   { background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: #fbbf24; }
+
+/* ═══════════════════════════════════════════════
+   NEON PROGRESS BAR
+═══════════════════════════════════════════════ */
+.neon-progress-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.neon-progress-emerald {
+  background: linear-gradient(90deg, #10e89b, #00d4ff);
+  box-shadow: 0 0 8px rgba(16, 232, 155, 0.6);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-progress-rose {
+  background: linear-gradient(90deg, #f43f5e, #fb923c);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neon-progress-amber {
+  background: linear-gradient(90deg, #f59e0b, #f97316);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+  border-radius: 999px;
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════════════════════════════════════
+   NEON INPUT
+═══════════════════════════════════════════════ */
+.input-web3 {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  color: #f1f5f9;
+  border-radius: 0.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-web3::placeholder { color: rgba(148, 163, 184, 0.4); }
+.input-web3:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1), 0 0 16px rgba(139, 92, 246, 0.15);
+}
+.input-web3-cyan:focus {
+  border-color: rgba(0, 212, 255, 0.6);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1), 0 0 16px rgba(0, 212, 255, 0.15);
+}
+.input-web3-emerald:focus {
+  border-color: rgba(16, 232, 155, 0.6);
+  box-shadow: 0 0 0 3px rgba(16, 232, 155, 0.1), 0 0 16px rgba(16, 232, 155, 0.15);
+}
+.input-web3-rose:focus {
+  border-color: rgba(244, 63, 94, 0.6);
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1), 0 0 16px rgba(244, 63, 94, 0.15);
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATED GRADIENT BORDER
+═══════════════════════════════════════════════ */
+@keyframes border-spin {
+  from { --border-angle: 0deg; }
+  to   { --border-angle: 360deg; }
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.neon-border-animated {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box,
+    conic-gradient(from var(--border-angle), #8b5cf6, #00d4ff, #10e89b, #8b5cf6) border-box;
+  animation: border-spin 4s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════════ */
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
@@ -61,67 +298,69 @@ html {
   to   { opacity: 1; transform: scale(1); }
 }
 
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-4px); }
+}
+
 .animate-in {
   animation-duration: 350ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   animation-fill-mode: both;
 }
 
-.fade-in            { animation-name: fade-in; }
-.slide-in-from-bottom { animation-name: slide-in-from-bottom; }
-.slide-in-from-bottom-2 { animation-name: slide-in-from-bottom-2; }
-.scale-in           { animation-name: scale-in; }
+.duration-200  { animation-duration: 200ms; }
+.duration-300  { animation-duration: 300ms; }
 
-/* ─────────────────────────────────────────
-   Scrollbar styling
-───────────────────────────────────────── */
-::-webkit-scrollbar {
-  width: 4px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+.fade-in                { animation-name: fade-in; }
+.slide-in-from-bottom   { animation-name: slide-in-from-bottom; }
+.slide-in-from-bottom-2 { animation-name: slide-in-from-bottom-2; }
+.scale-in               { animation-name: scale-in; }
+.animate-glow-pulse     { animation: glow-pulse 2.5s ease-in-out infinite; }
+.animate-float          { animation: float 3s ease-in-out infinite; }
+
+/* ═══════════════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(139, 92, 246, 0.3);
   border-radius: 999px;
 }
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.6);
 }
 
-/* ─────────────────────────────────────────
-   Focus visible improvements
-───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   FOCUS
+═══════════════════════════════════════════════ */
 :focus-visible {
-  outline: 2px solid #10b981;
+  outline: 2px solid rgba(139, 92, 246, 0.7);
   outline-offset: 2px;
   border-radius: 8px;
 }
 
-/* ─────────────────────────────────────────
-   Input number arrows removal
-───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   INPUT NUMBER SPINNER REMOVAL
+═══════════════════════════════════════════════ */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type="number"] {
-  -moz-appearance: textfield;
-}
+input[type="number"] { -moz-appearance: textfield; }
 
-/* ─────────────────────────────────────────
-   Glass effect utility
-───────────────────────────────────────── */
-.glass {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+/* Date input styling */
+input[type="date"] { color-scheme: dark; }
 
-/* ─────────────────────────────────────────
-   Safe area padding for notch devices
-───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   SAFE AREA
+═══════════════════════════════════════════════ */
 .safe-top    { padding-top: env(safe-area-inset-top); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }

@@ -16,14 +16,14 @@ interface BudgetPanelProps {
 
 function ProgressBar({ value, max, color }: { value: number; max: number; color: "emerald" | "rose" }) {
   const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
-  const barColor =
-    pct >= 100 ? "bg-rose-500" :
-    pct >= 80  ? "bg-amber-400" :
-    color === "emerald" ? "bg-emerald-500" : "bg-rose-500";
+  const barClass =
+    pct >= 100 ? "neon-progress-rose" :
+    pct >= 80  ? "neon-progress-amber" :
+    color === "emerald" ? "neon-progress-emerald" : "neon-progress-rose";
 
   return (
-    <div className="w-full h-2 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-      <div className={`h-full rounded-full transition-all duration-700 ${barColor}`} style={{ width: `${pct}%` }} />
+    <div className="w-full h-2.5 neon-progress-track">
+      <div className={`h-full ${barClass}`} style={{ width: `${pct}%` }} />
     </div>
   );
 }
@@ -89,14 +89,14 @@ export default function BudgetPanel({ totalIncome, totalExpense }: BudgetPanelPr
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 flex items-center justify-center h-28">
-        <LoadingSpinner size="sm" />
+      <div className="glass rounded-2xl border-violet-500/20 p-4 flex items-center justify-center h-28">
+        <LoadingSpinner size="sm" color="emerald" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 p-4 space-y-3">
+    <div className="glass rounded-2xl border-violet-500/20 p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
