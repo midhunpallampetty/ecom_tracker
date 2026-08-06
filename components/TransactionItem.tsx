@@ -163,32 +163,43 @@ export default function TransactionItem({ transaction, onDelete, onUpdate, style
 
       {/* Delete confirmation */}
       {showConfirm && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-sm shadow-2xl border dark:border-slate-800 animate-in slide-in-from-bottom duration-300">
-            <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
-              <span className="text-red-500 text-xl">🗑</span>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-5"
+          onClick={() => !deleting && setShowConfirm(false)}
+        >
+          <div
+            className="bg-white dark:bg-slate-900 rounded-3xl p-6 w-full max-w-sm shadow-2xl border border-slate-100 dark:border-slate-800 animate-in scale-in duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-14 h-14 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+              <span className="text-red-500 text-2xl">🗑</span>
             </div>
-            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-center text-lg mb-1">Delete Transaction?</h3>
+            <h3 className="font-bold text-slate-800 dark:text-slate-100 text-center text-lg mb-2">Delete Transaction?</h3>
             <p className="text-slate-500 dark:text-slate-400 text-center text-sm mb-6">
               This will permanently remove{" "}
               <span className={isIncome ? "text-emerald-600 font-semibold" : "text-rose-500 font-semibold"}>
                 {isIncome ? "+" : "−"}{formatCurrency(transaction.amount)}
-              </span>{" "}from your records.
+              </span>
+              {" "}from your records.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConfirm(false)}
                 disabled={deleting}
-                className="flex-1 py-3 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+                className="flex-1 py-3.5 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={deleting}
-                className="flex-1 py-3 rounded-2xl bg-red-500 text-white font-semibold text-sm hover:bg-red-600 transition-colors disabled:opacity-70 flex items-center justify-center"
+                className="flex-1 py-3.5 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition-colors disabled:opacity-70 flex items-center justify-center gap-1.5 shadow-lg shadow-red-500/30"
               >
-                {deleting ? "Deleting..." : "Delete"}
+                {deleting ? (
+                  <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /><span>Deleting…</span></>
+                ) : (
+                  <><span>🗑</span><span>Delete</span></>
+                )}
               </button>
             </div>
           </div>
