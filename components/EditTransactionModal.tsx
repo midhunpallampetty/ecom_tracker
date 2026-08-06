@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import LoadingSpinner from "./LoadingSpinner";
 
 interface Transaction {
@@ -66,7 +67,10 @@ export default function EditTransactionModal({
     !!(transaction.channel || transaction.sku || transaction.cogs || transaction.platformFee || transaction.adSpend || transaction.orderId)
   );
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError]     = useState("");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   // Close on Escape
   useEffect(() => {
@@ -128,8 +132,13 @@ export default function EditTransactionModal({
     ? "from-emerald-500 to-teal-500"
     : "from-rose-500 to-pink-500";
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  if (!mounted) return null;
+
+  const modal = (
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
       <div
         className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-lg shadow-2xl border border-slate-100 dark:border-slate-800 animate-in slide-in-from-bottom duration-300 max-h-[90vh] flex flex-col"
         onClick={(e) => e.stopPropagation()}
@@ -346,4 +355,6 @@ export default function EditTransactionModal({
       </div>
     </div>
   );
+
+  return createPortal(modal, document.body);
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { formatCurrency, formatDate, formatTime } from "@/utils/formatCurrency";
 import EditTransactionModal from "./EditTransactionModal";
 
@@ -37,6 +38,9 @@ export default function TransactionItem({ transaction, onDelete, onUpdate, style
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleting, setDeleting]       = useState(false);
   const [showEdit, setShowEdit]       = useState(false);
+  const [mounted, setMounted]         = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
 
   const isIncome = transaction.type === "income";
   const totalDeductions = (transaction.cogs || 0) + (transaction.platformFee || 0) + (transaction.adSpend || 0);
@@ -161,10 +165,10 @@ export default function TransactionItem({ transaction, onDelete, onUpdate, style
         />
       )}
 
-      {/* Delete confirmation */}
-      {showConfirm && (
+      {/* Delete confirmation — rendered via portal to escape overflow stacking context */}
+      {showConfirm && mounted && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-5"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-5"
           onClick={() => !deleting && setShowConfirm(false)}
         >
           <div
@@ -203,7 +207,8 @@ export default function TransactionItem({ transaction, onDelete, onUpdate, style
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
