@@ -22,6 +22,7 @@ import ExportDataPromptModal from "@/components/ExportDataPromptModal";
 import GstFilingModal from "@/components/GstFilingModal";
 import BudgetPanel from "@/components/BudgetPanel";
 import DueSoonNotification from "@/components/DueSoonNotification";
+import NetSpendWarningBanner from "@/components/NetSpendWarningBanner";
 
 interface Transaction {
   _id: string;
@@ -552,6 +553,9 @@ export default function DashboardPage() {
   ══════════════════════════════════════════════════════════════════ */
   return (
     <>
+      {/* Global net-spend warning banner — sticky top on both layouts */}
+      <NetSpendWarningBanner totalIncome={totalIncome} totalExpense={totalExpense} />
+
       {/* Mobile: shown below lg */}
       <div className="lg:hidden">
         <MobileLayout />
