@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { MonthlyProfitChartSkeleton } from "./SkeletonLoaders";
 
 interface Transaction {
   _id: string;
@@ -15,6 +16,7 @@ interface Transaction {
 
 interface MonthlyProfitChartProps {
   transactions: Transaction[];
+  loading?: boolean;
 }
 
 const MONTH_NAMES = [
@@ -22,8 +24,12 @@ const MONTH_NAMES = [
   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
 
-export default function MonthlyProfitChart({ transactions }: MonthlyProfitChartProps) {
+export default function MonthlyProfitChart({ transactions, loading = false }: MonthlyProfitChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  if (loading) {
+    return <MonthlyProfitChartSkeleton />;
+  }
 
   // Group transactions by month (last 12 months)
   const monthlyData = useMemo(() => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { CashflowGraphSkeleton } from "./SkeletonLoaders";
 
 interface Transaction {
   _id: string;
@@ -11,13 +12,18 @@ interface Transaction {
 
 interface CashflowGraphProps {
   transactions: Transaction[];
+  loading?: boolean;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export default function CashflowGraph({ transactions }: CashflowGraphProps) {
+export default function CashflowGraph({ transactions, loading = false }: CashflowGraphProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  if (loading) {
+    return <CashflowGraphSkeleton />;
+  }
 
   const data = useMemo(() => {
     const now = new Date();

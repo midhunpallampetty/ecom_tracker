@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { BalanceSummaryCardSkeleton } from "./SkeletonLoaders";
 
 interface BalanceSummaryCardProps {
   totalIncome: number;
@@ -13,6 +14,7 @@ interface BalanceSummaryCardProps {
   totalCogs?: number;
   totalFees?: number;
   totalAdSpend?: number;
+  loading?: boolean;
 }
 
 export default function BalanceSummaryCard({
@@ -25,6 +27,7 @@ export default function BalanceSummaryCard({
   totalCogs = 0,
   totalFees = 0,
   totalAdSpend = 0,
+  loading = false,
 }: BalanceSummaryCardProps) {
   const isProfit = balance >= 0;
   const [animated, setAnimated] = useState(false);
@@ -33,6 +36,10 @@ export default function BalanceSummaryCard({
     const timer = setTimeout(() => setAnimated(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  if (loading) {
+    return <BalanceSummaryCardSkeleton />;
+  }
 
   const projectedIncome = totalIncome + upcomingIncomeTotal;
   const projectedExpense = totalExpense + upcomingExpenseTotal;

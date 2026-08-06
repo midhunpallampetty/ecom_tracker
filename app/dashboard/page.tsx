@@ -10,6 +10,12 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import CashflowGraph from "@/components/CashflowGraph";
 import AddUpcomingForm from "@/components/AddUpcomingForm";
 import UpcomingList from "@/components/UpcomingList";
+import {
+  TransactionListSkeleton,
+  UpcomingListSkeleton,
+  HeaderStatsSkeleton,
+  SidebarUpcomingSkeleton,
+} from "@/components/SkeletonLoaders";
 
 import MonthlyProfitChart from "@/components/MonthlyProfitChart";
 import ExportDataPromptModal from "@/components/ExportDataPromptModal";
@@ -115,17 +121,14 @@ export default function DashboardPage() {
             <h2 className="text-slate-700 dark:text-slate-200 font-bold text-lg">
               All Transactions
             </h2>
-            {transactions.length > 0 && (
+            {!loading && transactions.length > 0 && (
               <span className="text-slate-400 text-xs bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-full">
                 {transactions.length} records
               </span>
             )}
           </div>
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-24 gap-4">
-              <LoadingSpinner size="lg" color="slate" />
-              <p className="text-slate-400 text-sm">Loading transactions…</p>
-            </div>
+            <TransactionListSkeleton count={5} />
           ) : error ? (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-2xl p-6 text-center">
               <p className="text-red-500 font-medium text-sm mb-3">{error}</p>
@@ -140,7 +143,7 @@ export default function DashboardPage() {
       )}
 
       {activeTab === "analytics" && (
-        <MonthlyProfitChart transactions={transactions} />
+        <MonthlyProfitChart transactions={transactions} loading={loading} />
       )}
 
       {activeTab === "add-income" && (
@@ -157,17 +160,14 @@ export default function DashboardPage() {
             <h2 className="text-slate-700 dark:text-slate-200 font-bold text-lg">
               Upcoming Payments
             </h2>
-            {upcomingItems.length > 0 && (
+            {!upcomingLoading && upcomingItems.length > 0 && (
               <span className="text-violet-500 text-xs bg-violet-100 dark:bg-violet-900/30 px-3 py-1 rounded-full font-medium">
                 {upcomingItems.length} scheduled
               </span>
             )}
           </div>
           {upcomingLoading ? (
-            <div className="flex flex-col items-center justify-center py-12 gap-4">
-              <LoadingSpinner size="lg" color="slate" />
-              <p className="text-slate-400 text-sm">Loading upcoming…</p>
-            </div>
+            <UpcomingListSkeleton count={4} />
           ) : (
             <UpcomingList items={upcomingItems} onDelete={handleUpcomingDelete} />
           )}
@@ -237,11 +237,12 @@ export default function DashboardPage() {
             totalCogs={totalCogs}
             totalFees={totalFees}
             totalAdSpend={totalAdSpend}
+            loading={loading}
           />
         </div>
 
         <div className="px-5 mb-4">
-          <CashflowGraph transactions={transactions} />
+          <CashflowGraph transactions={transactions} loading={loading} />
         </div>
 
         {/* Mobile tabs */}
@@ -298,45 +299,49 @@ export default function DashboardPage() {
         </div>
 
         {/* Center: quick stats */}
-        <div className="flex items-center gap-6">
-          <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Balance</p>
-            <p className={`font-bold text-lg ${balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
-              {balance >= 0 ? "+" : "−"}₹{Math.abs(balance).toLocaleString("en-IN")}
-            </p>
+        {loading || upcomingLoading ? (
+          <HeaderStatsSkeleton />
+        ) : (
+          <div className="flex items-center gap-6">
+            <div className="text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-wider">Balance</p>
+              <p className={`font-bold text-lg ${balance >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+                {balance >= 0 ? "+" : "−"}₹{Math.abs(balance).toLocaleString("en-IN")}
+              </p>
+            </div>
+            <div className="w-px h-8 bg-slate-800" />
+            <div className="text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-wider">Sales / Income</p>
+              <p className="font-bold text-lg text-emerald-400">₹{totalIncome.toLocaleString("en-IN")}</p>
+            </div>
+            <div className="w-px h-8 bg-slate-800" />
+            <div className="text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-wider">Expenses</p>
+              <p className="font-bold text-lg text-rose-400">₹{totalExpense.toLocaleString("en-IN")}</p>
+            </div>
+            <div className="w-px h-8 bg-slate-800" />
+            <div className="text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming In</p>
+              <p className="font-bold text-lg text-emerald-400">₹{upcomingIncomeTotal.toLocaleString("en-IN")}</p>
+            </div>
+            <div className="w-px h-8 bg-slate-800" />
+            <div className="text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming Out</p>
+              <p className="font-bold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
+            </div>
+            {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0) && (
+              <>
+                <div className="w-px h-8 bg-slate-800" />
+                <div className="text-center">
+                  <p className="text-violet-400 text-xs uppercase font-bold tracking-wider">Projected Net</p>
+                  <p className={`font-bold text-lg ${ (balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "text-emerald-400" : "text-rose-400" }`}>
+                    {(balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "+" : "−"}₹{Math.abs(balance + upcomingIncomeTotal - upcomingExpenseTotal).toLocaleString("en-IN")}
+                  </p>
+                </div>
+              </>
+            )}
           </div>
-          <div className="w-px h-8 bg-slate-800" />
-          <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Sales / Income</p>
-            <p className="font-bold text-lg text-emerald-400">₹{totalIncome.toLocaleString("en-IN")}</p>
-          </div>
-          <div className="w-px h-8 bg-slate-800" />
-          <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Expenses</p>
-            <p className="font-bold text-lg text-rose-400">₹{totalExpense.toLocaleString("en-IN")}</p>
-          </div>
-          <div className="w-px h-8 bg-slate-800" />
-          <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming In</p>
-            <p className="font-bold text-lg text-emerald-400">₹{upcomingIncomeTotal.toLocaleString("en-IN")}</p>
-          </div>
-          <div className="w-px h-8 bg-slate-800" />
-          <div className="text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-wider">Upcoming Out</p>
-            <p className="font-bold text-lg text-rose-400">₹{upcomingExpenseTotal.toLocaleString("en-IN")}</p>
-          </div>
-          {(upcomingIncomeTotal > 0 || upcomingExpenseTotal > 0) && (
-            <>
-              <div className="w-px h-8 bg-slate-800" />
-              <div className="text-center">
-                <p className="text-violet-400 text-xs uppercase font-bold tracking-wider">Projected Net</p>
-                <p className={`font-bold text-lg ${ (balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "text-emerald-400" : "text-rose-400" }`}>
-                  {(balance + upcomingIncomeTotal - upcomingExpenseTotal) >= 0 ? "+" : "−"}₹{Math.abs(balance + upcomingIncomeTotal - upcomingExpenseTotal).toLocaleString("en-IN")}
-                </p>
-              </div>
-            </>
-          )}
-        </div>
+        )}
 
         <div className="flex items-center gap-3">
           <button
@@ -386,6 +391,7 @@ export default function DashboardPage() {
               totalCogs={totalCogs}
               totalFees={totalFees}
               totalAdSpend={totalAdSpend}
+              loading={loading}
             />
 
             {/* Quick Action Buttons */}
@@ -442,7 +448,9 @@ export default function DashboardPage() {
             </nav>
 
             {/* Mini upcoming summary in sidebar */}
-            {upcomingItems.length > 0 && (
+            {upcomingLoading ? (
+              <SidebarUpcomingSkeleton />
+            ) : upcomingItems.length > 0 ? (
               <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4">
                 <p className="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-3">
                   Next Due
@@ -471,7 +479,7 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         </aside>
 
@@ -509,7 +517,7 @@ export default function DashboardPage() {
               <p className="text-slate-500 text-xs font-semibold uppercase tracking-widest mb-3">
                 Cashflow · 6 Months
               </p>
-              <CashflowGraph transactions={transactions} />
+              <CashflowGraph transactions={transactions} loading={loading} />
             </div>
 
             {/* Quick add upcoming — right panel shortcut */}
