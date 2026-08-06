@@ -101,9 +101,10 @@ export default function MonthlyProfitChart({ transactions, loading = false }: Mo
   const toX = (i: number) => PAD.left + (i / (monthlyData.length - 1)) * chartW;
   const toY = (v: number) => PAD.top + (1 - Math.max(0, v) / maxVal) * chartH;
 
-  // Build curved line path for Net Profit
+  // Build curved line path and glowing area fill for Net Profit
   const profitPoints = monthlyData.map((d, i) => [toX(i), toY(d.netProfit)] as [number, number]);
   let profitLineD = "";
+  let profitAreaD = "";
   if (profitPoints.length > 1) {
     profitLineD = `M ${profitPoints[0][0]} ${profitPoints[0][1]}`;
     for (let i = 0; i < profitPoints.length - 1; i++) {
@@ -111,6 +112,9 @@ export default function MonthlyProfitChart({ transactions, loading = false }: Mo
       const cp2x = profitPoints[i + 1][0] - (profitPoints[i + 1][0] - profitPoints[i][0]) * 0.4;
       profitLineD += ` C ${cp1x} ${profitPoints[i][1]} ${cp2x} ${profitPoints[i + 1][1]} ${profitPoints[i + 1][0]} ${profitPoints[i + 1][1]}`;
     }
+    const lastPt = profitPoints[profitPoints.length - 1];
+    const firstPt = profitPoints[0];
+    profitAreaD = `${profitLineD} L ${lastPt[0]} ${PAD.top + chartH} L ${firstPt[0]} ${PAD.top + chartH} Z`;
   }
 
   const formatK = (n: number) =>
@@ -272,6 +276,15 @@ export default function MonthlyProfitChart({ transactions, loading = false }: Mo
                 </g>
               );
             })}
+
+            {/* Net Profit Area Fill */}
+            {profitAreaD && (
+              <path
+                d={profitAreaD}
+                fill="url(#profitGlowGrad)"
+                stroke="none"
+              />
+            )}
 
             {/* Net Profit Line */}
             {profitLineD && (

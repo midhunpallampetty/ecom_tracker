@@ -17,7 +17,7 @@ import {
   SidebarUpcomingSkeleton,
 } from "@/components/SkeletonLoaders";
 
-import MonthlyProfitChart from "@/components/MonthlyProfitChart";
+import AnalyticsHub from "@/components/AnalyticsHub";
 import ExportDataPromptModal from "@/components/ExportDataPromptModal";
 import GstFilingModal from "@/components/GstFilingModal";
 
@@ -45,11 +45,11 @@ interface UpcomingItem {
 type TabType = "history" | "analytics" | "add-income" | "add-expense" | "upcoming";
 
 const NAV_ITEMS: { id: TabType; label: string; icon: string; color: string }[] = [
-  { id: "history",     label: "History",       icon: "📋", color: "slate"  },
-  { id: "analytics",   label: "Monthly Profit",icon: "📈", color: "violet" },
-  { id: "add-income",  label: "Add Income",    icon: "💚", color: "emerald"},
-  { id: "add-expense", label: "Add Expense",   icon: "🔴", color: "rose"   },
-  { id: "upcoming",    label: "Upcoming",      icon: "📅", color: "violet" },
+  { id: "history",     label: "History",            icon: "📋", color: "slate"  },
+  { id: "analytics",   label: "Analytics & Charts", icon: "📈", color: "violet" },
+  { id: "add-income",  label: "Add Income",         icon: "💚", color: "emerald"},
+  { id: "add-expense", label: "Add Expense",        icon: "🔴", color: "rose"   },
+  { id: "upcoming",    label: "Upcoming",           icon: "📅", color: "violet" },
 ];
 
 /* ─────────────────────────────────────────────── */
@@ -143,7 +143,7 @@ export default function DashboardPage() {
       )}
 
       {activeTab === "analytics" && (
-        <MonthlyProfitChart transactions={transactions} loading={loading} />
+        <AnalyticsHub transactions={transactions} loading={loading} />
       )}
 
       {activeTab === "add-income" && (
