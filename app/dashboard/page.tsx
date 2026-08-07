@@ -321,7 +321,7 @@ export default function DashboardPage() {
         {loading || upcomingLoading ? (
           <HeaderStatsSkeleton />
         ) : (
-          <div className="flex items-center gap-6 glass px-6 py-2 rounded-2xl border-violet-500/20">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-6 glass px-3 xl:px-6 py-2 rounded-2xl border-violet-500/20 shrink min-w-0 overflow-x-auto">
             <div className="text-center">
               <p className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Balance</p>
               <p className={`font-extrabold text-lg ${balance >= 0 ? "gradient-text-profit glow-text-emerald" : "gradient-text-loss glow-text-rose"}`}>
@@ -362,17 +362,17 @@ export default function DashboardPage() {
           </div>
         )}
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setIsGstModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl pill-amber text-sm font-bold transition-all duration-200"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl pill-amber text-xs sm:text-sm font-bold transition-all duration-200 shrink-0 whitespace-nowrap"
           >
             <span>🏛️</span>
             <span>GST Filing Vault</span>
           </button>
           <button
             onClick={() => setIsExportModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl pill-violet text-sm font-bold transition-all duration-200"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl pill-violet text-xs sm:text-sm font-bold transition-all duration-200 shrink-0 whitespace-nowrap"
           >
             <span>🤖</span>
             <span>Export AI Prompt Data</span>
@@ -381,9 +381,9 @@ export default function DashboardPage() {
           <button
             id="logout-btn-desktop"
             onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl glass hover:border-rose-500/40 text-slate-400 hover:text-rose-400 text-sm font-medium transition-all duration-200"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl glass hover:border-rose-500/40 text-slate-400 hover:text-rose-400 text-xs sm:text-sm font-medium transition-all duration-200 shrink-0 whitespace-nowrap"
           >
-            <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4">
+            <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 shrink-0">
               <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>

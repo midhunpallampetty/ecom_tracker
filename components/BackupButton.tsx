@@ -101,7 +101,7 @@ export default function BackupButton({ compact = false }: BackupButtonProps) {
         <button
           onClick={handleBackup}
           disabled={isBackingUp}
-          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 relative overflow-hidden ${
+          className={`flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 relative overflow-hidden shrink-0 whitespace-nowrap ${
             isBackingUp
               ? "glass-cyan text-cyan-300 border-cyan-500/50 glow-cyan animate-pulse cursor-wait shadow-lg"
               : "pill-cyan text-cyan-300 hover:scale-105 active:scale-95 shadow-md hover:shadow-cyan-500/20"
@@ -128,12 +128,12 @@ export default function BackupButton({ compact = false }: BackupButtonProps) {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 />
               </svg>
-              <span className="tracking-wide animate-pulse">Backing up...</span>
+              <span className="tracking-wide animate-pulse whitespace-nowrap">Backing up...</span>
             </>
           ) : (
             <>
-              <span className="text-base leading-none">☁️</span>
-              <span>Backup</span>
+              <span className="text-base leading-none shrink-0">☁️</span>
+              <span className="whitespace-nowrap">Backup</span>
             </>
           )}
         </button>
