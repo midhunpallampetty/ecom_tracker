@@ -295,3 +295,22 @@ export function AiProjectionSkeleton() {
   );
 }
 
+/**
+ * Skeleton loader for Blood Flow Visualizer
+ */
+export function BloodFlowVisualizerSkeleton() {
+  return (
+    <div className="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-2xl space-y-4 w-full">
+      <div className="flex items-center justify-between">
+        <Skeleton variant="text" className="w-36 h-4 bg-slate-800" />
+        <Skeleton variant="rounded" className="w-24 h-6 bg-slate-800 rounded-xl" />
+      </div>
+      <Skeleton variant="rounded" className="w-full h-44 bg-slate-950 rounded-2xl" />
+      <div className="flex justify-between">
+        <Skeleton variant="text" className="w-28 h-3 bg-slate-800" />
+        <Skeleton variant="text" className="w-20 h-3 bg-slate-800" />
+      </div>
+    </div>
+  );
+}
+

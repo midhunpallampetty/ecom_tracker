@@ -8,6 +8,7 @@ import TransactionList from "@/components/TransactionList";
 import ThemeToggle from "@/components/ThemeToggle";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import CashflowGraph from "@/components/CashflowGraph";
+import CashflowHealthHub from "@/components/CashflowHealthHub";
 import AddUpcomingForm from "@/components/AddUpcomingForm";
 import UpcomingList from "@/components/UpcomingList";
 import {
@@ -259,7 +260,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="px-5 mb-4">
-          <CashflowGraph transactions={transactions} loading={loading} />
+          <CashflowHealthHub transactions={transactions} loading={loading} compact={true} />
         </div>
 
         {/* Mobile tabs */}
@@ -540,9 +541,9 @@ export default function DashboardPage() {
           <div className="p-5 space-y-5">
             <div>
               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-3">
-                Cashflow · 6 Months
+                Cashflow & Blood Flow Hub
               </p>
-              <CashflowGraph transactions={transactions} loading={loading} />
+              <CashflowHealthHub transactions={transactions} loading={loading} compact={true} />
             </div>
 
             {/* Quick add upcoming — right panel shortcut */}

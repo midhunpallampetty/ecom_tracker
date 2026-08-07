@@ -13,13 +13,27 @@ interface Transaction {
 interface CashflowGraphProps {
   transactions: Transaction[];
   loading?: boolean;
+  hoveredMonthIndex?: number | null;
+  onHoverMonth?: (idx: number | null) => void;
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-export default function CashflowGraph({ transactions, loading = false }: CashflowGraphProps) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+export default function CashflowGraph({
+  transactions,
+  loading = false,
+  hoveredMonthIndex = null,
+  onHoverMonth,
+}: CashflowGraphProps) {
+  const [internalHoverIdx, setInternalHoverIdx] = useState<number | null>(null);
+
+  const activeHoverIdx = hoveredMonthIndex !== null ? hoveredMonthIndex : internalHoverIdx;
+
+  const handleHoverChange = (idx: number | null) => {
+    setInternalHoverIdx(idx);
+    if (onHoverMonth) onHoverMonth(idx);
+  };
 
   if (loading) {
     return <CashflowGraphSkeleton />;
@@ -94,7 +108,7 @@ export default function CashflowGraph({ transactions, loading = false }: Cashflo
   const formatK = (v: number) =>
     v >= 1000 ? `₹${(v / 1000).toFixed(1)}k` : `₹${v.toFixed(0)}`;
 
-  const hovered = hoveredIdx !== null ? data[hoveredIdx] : null;
+  const hovered = activeHoverIdx !== null ? data[activeHoverIdx] : null;
 
   return (
     <div className="bg-slate-900 border border-slate-800 rounded-3xl p-4 shadow-2xl w-full">
@@ -229,7 +243,7 @@ export default function CashflowGraph({ transactions, loading = false }: Cashflo
             const x = toX(i);
             const iy = toY(d.income);
             const ey = toY(d.expense);
-            const isHovered = hoveredIdx === i;
+            const isHovered = activeHoverIdx === i;
             return (
               <g key={i}>
                 {/* Hover vertical line */}
@@ -269,10 +283,10 @@ export default function CashflowGraph({ transactions, loading = false }: Cashflo
                   height={chartH}
                   fill="transparent"
                   style={{ cursor: "crosshair" }}
-                  onMouseEnter={() => setHoveredIdx(i)}
-                  onMouseLeave={() => setHoveredIdx(null)}
-                  onTouchStart={() => setHoveredIdx(i)}
-                  onTouchEnd={() => setHoveredIdx(null)}
+                  onMouseEnter={() => handleHoverChange(i)}
+                  onMouseLeave={() => handleHoverChange(null)}
+                  onTouchStart={() => handleHoverChange(i)}
+                  onTouchEnd={() => handleHoverChange(null)}
                 />
 
                 {/* Month label */}

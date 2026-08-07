@@ -11,6 +11,8 @@ import TrendAnalysisMetrics from "./TrendAnalysisMetrics";
 import { analyzeDataAndGenerateProjections } from "@/lib/projectionEngine";
 import { MonthlyProfitChartSkeleton, AiProjectionSkeleton } from "./SkeletonLoaders";
 
+import CashflowHealthHub from "./CashflowHealthHub";
+
 interface Transaction {
   _id: string;
   amount: number;
@@ -30,10 +32,11 @@ interface AnalyticsHubProps {
   loading?: boolean;
 }
 
-type AnalyticsSubTab = "projections" | "orders" | "monthly" | "leakage" | "channels" | "improvement";
+type AnalyticsSubTab = "projections" | "circulation" | "orders" | "monthly" | "leakage" | "channels" | "improvement";
 
 const SUB_TABS: { id: AnalyticsSubTab; label: string; icon: string; badge?: string }[] = [
   { id: "projections", label: "AI Growth Forecast", icon: "🤖", badge: "1M/3M/6M/12M" },
+  { id: "circulation", label: "Cashflow Blood Flow", icon: "🩸", badge: "Vital Circulation" },
   { id: "orders", label: "Order & Platform Tracker", icon: "📦", badge: "Meesho/FK/Amazon" },
   { id: "monthly", label: "Profit Trend", icon: "📈" },
   { id: "leakage", label: "Loss Leakage", icon: "🥧", badge: "Diagnostic" },
@@ -119,6 +122,9 @@ export default function AnalyticsHub({ transactions, loading = false }: Analytic
               onUpdateParams={handleUpdateParams}
             />
           </div>
+        )}
+        {activeSubTab === "circulation" && (
+          <CashflowHealthHub transactions={transactions} loading={loading} compact={false} />
         )}
         {activeSubTab === "orders" && <ChannelOrderTracker transactions={transactions} />}
         {activeSubTab === "monthly" && <MonthlyProfitChart transactions={transactions} />}
