@@ -258,3 +258,40 @@ export function SidebarUpcomingSkeleton() {
     </div>
   );
 }
+
+/**
+ * Skeleton loader for AI Growth Projection & Analysis Hub
+ */
+export function AiProjectionSkeleton() {
+  return (
+    <div className="space-y-6">
+      {/* 4 Horizon cards skeleton */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-4 space-y-3 shadow-sm"
+          >
+            <Skeleton variant="text" className="w-20 h-3" />
+            <Skeleton variant="text" className="w-28 h-7" />
+            <Skeleton variant="text" className="w-24 h-3" />
+            <Skeleton variant="rounded" className="w-full h-8 rounded-xl" />
+          </div>
+        ))}
+      </div>
+
+      {/* SVG Projection chart skeleton */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl p-6 shadow-sm space-y-4">
+        <div className="flex items-center justify-between">
+          <Skeleton variant="text" className="w-48 h-6" />
+          <div className="flex gap-2">
+            <Skeleton variant="rounded" className="w-20 h-8 rounded-xl" />
+            <Skeleton variant="rounded" className="w-20 h-8 rounded-xl" />
+          </div>
+        </div>
+        <Skeleton variant="rounded" className="w-full h-64 rounded-2xl" />
+      </div>
+    </div>
+  );
+}
+

@@ -1,12 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ChannelOrderTracker from "./ChannelOrderTracker";
 import MonthlyProfitChart from "./MonthlyProfitChart";
 import ExpenseLeakageChart from "./ExpenseLeakageChart";
 import ChannelPerformanceChart from "./ChannelPerformanceChart";
 import ProfitImprovementChart from "./ProfitImprovementChart";
-import { MonthlyProfitChartSkeleton } from "./SkeletonLoaders";
+import AiGrowthProjectionChart from "./AiGrowthProjectionChart";
+import TrendAnalysisMetrics from "./TrendAnalysisMetrics";
+import { analyzeDataAndGenerateProjections } from "@/lib/projectionEngine";
+import { MonthlyProfitChartSkeleton, AiProjectionSkeleton } from "./SkeletonLoaders";
 
 interface Transaction {
   _id: string;
@@ -27,9 +30,10 @@ interface AnalyticsHubProps {
   loading?: boolean;
 }
 
-type AnalyticsSubTab = "orders" | "monthly" | "leakage" | "channels" | "improvement";
+type AnalyticsSubTab = "projections" | "orders" | "monthly" | "leakage" | "channels" | "improvement";
 
 const SUB_TABS: { id: AnalyticsSubTab; label: string; icon: string; badge?: string }[] = [
+  { id: "projections", label: "AI Growth Forecast", icon: "🤖", badge: "1M/3M/6M/12M" },
   { id: "orders", label: "Order & Platform Tracker", icon: "📦", badge: "Meesho/FK/Amazon" },
   { id: "monthly", label: "Profit Trend", icon: "📈" },
   { id: "leakage", label: "Loss Leakage", icon: "🥧", badge: "Diagnostic" },
@@ -38,11 +42,24 @@ const SUB_TABS: { id: AnalyticsSubTab; label: string; icon: string; badge?: stri
 ];
 
 export default function AnalyticsHub({ transactions, loading = false }: AnalyticsHubProps) {
-  const [activeSubTab, setActiveSubTab] = useState<AnalyticsSubTab>("orders");
+  const [activeSubTab, setActiveSubTab] = useState<AnalyticsSubTab>("projections");
+  const [selectedHorizon, setSelectedHorizon] = useState<"1m" | "3m" | "6m" | "12m">("6m");
+  const [growthMultiplier, setGrowthMultiplier] = useState(1);
+  const [adScaling, setAdScaling] = useState(1);
+
+  // Compute projections & data analysis dynamically
+  const projectionData = useMemo(() => {
+    return analyzeDataAndGenerateProjections(transactions, growthMultiplier, adScaling);
+  }, [transactions, growthMultiplier, adScaling]);
 
   if (loading) {
-    return <MonthlyProfitChartSkeleton />;
+    return activeSubTab === "projections" ? <AiProjectionSkeleton /> : <MonthlyProfitChartSkeleton />;
   }
+
+  const handleUpdateParams = (growthMult: number, adScale: number) => {
+    setGrowthMultiplier(growthMult);
+    setAdScaling(adScale);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -81,12 +98,28 @@ export default function AnalyticsHub({ transactions, loading = false }: Analytic
 
         <div className="px-3 py-1 flex items-center gap-2 text-xs font-semibold text-slate-400 border-l border-slate-100 dark:border-slate-800 hidden md:flex">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          <span>High Graphics Engine</span>
+          <span>High Graphics AI Engine</span>
         </div>
       </div>
 
       {/* ── Active Chart View Content ── */}
       <div>
+        {activeSubTab === "projections" && (
+          <div className="space-y-6">
+            <TrendAnalysisMetrics
+              data={projectionData}
+              selectedHorizon={selectedHorizon}
+              onSelectHorizon={setSelectedHorizon}
+            />
+            <AiGrowthProjectionChart
+              data={projectionData}
+              selectedHorizon={selectedHorizon}
+              growthMultiplier={growthMultiplier}
+              adScaling={adScaling}
+              onUpdateParams={handleUpdateParams}
+            />
+          </div>
+        )}
         {activeSubTab === "orders" && <ChannelOrderTracker transactions={transactions} />}
         {activeSubTab === "monthly" && <MonthlyProfitChart transactions={transactions} />}
         {activeSubTab === "leakage" && <ExpenseLeakageChart transactions={transactions} />}
