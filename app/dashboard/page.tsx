@@ -24,6 +24,7 @@ import BudgetPanel from "@/components/BudgetPanel";
 import DueSoonNotification from "@/components/DueSoonNotification";
 import NetSpendWarningBanner from "@/components/NetSpendWarningBanner";
 import UserSessionManager from "@/components/UserSessionManager";
+import BackupButton from "@/components/BackupButton";
 
 interface Transaction {
   _id: string;
@@ -226,6 +227,7 @@ export default function DashboardPage() {
               <span>🤖</span>
               <span>Prompt</span>
             </button>
+            <BackupButton compact={true} />
             <button
               id="logout-btn"
               onClick={handleLogout}
@@ -375,6 +377,7 @@ export default function DashboardPage() {
             <span>🤖</span>
             <span>Export AI Prompt Data</span>
           </button>
+          <BackupButton />
           <button
             id="logout-btn-desktop"
             onClick={handleLogout}
