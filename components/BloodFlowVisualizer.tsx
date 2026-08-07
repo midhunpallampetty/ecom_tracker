@@ -388,59 +388,37 @@ export default function BloodFlowVisualizer({
       />
 
       {/* Header */}
-      <div className="flex items-center justify-between mb-2 z-10">
-        <div>
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
+      <div className="flex items-center justify-between mb-2 z-10 gap-2">
+        <div className="min-w-0">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+            <p className="text-slate-400 text-[11px] font-semibold uppercase tracking-wider truncate">
               Cashflow Circulation
             </p>
           </div>
-          <p className="text-white font-extrabold text-sm flex items-center gap-1.5 mt-0.5">
+          <p className="text-white font-extrabold text-xs flex items-center gap-1 mt-0.5 flex-wrap">
             <span>Financial Blood Flow</span>
-            <span className={`text-[10px] px-2 py-0.5 rounded-full border ${metrics.badgeBg} font-bold`}>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded-full border ${metrics.badgeBg} font-bold whitespace-nowrap`}>
               {metrics.vitalityScore}% SpO₂
             </span>
           </p>
         </div>
 
-        {/* View Mode Selector Tabs */}
-        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
-          <button
-            onClick={() => setActiveViewMode("flow")}
-            className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
-              activeViewMode === "flow"
-                ? "bg-slate-800 text-cyan-300 shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            🩸 Circulation
-          </button>
-          <button
-            onClick={() => setActiveViewMode("ekg")}
-            className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
-              activeViewMode === "ekg"
-                ? "bg-slate-800 text-cyan-300 shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            💓 Vitals
-          </button>
-          <button
-            onClick={() => setActiveViewMode("diagnostics")}
-            className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all ${
-              activeViewMode === "diagnostics"
-                ? "bg-slate-800 text-cyan-300 shadow-sm"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            📋 Scan
-          </button>
-        </div>
+        {/* View Mode — compact select dropdown */}
+        <select
+          value={activeViewMode}
+          onChange={(e) => setActiveViewMode(e.target.value as "flow" | "ekg" | "diagnostics")}
+          className="shrink-0 bg-slate-950 border border-slate-700 text-slate-300 text-[11px] font-semibold rounded-lg px-2 py-1 cursor-pointer focus:outline-none focus:ring-1 focus:ring-cyan-500 focus:border-cyan-500 transition-all"
+          aria-label="Select blood flow view mode"
+        >
+          <option value="flow" className="bg-slate-900">🩸 Circulation</option>
+          <option value="ekg" className="bg-slate-900">💓 Vitals</option>
+          <option value="diagnostics" className="bg-slate-900">📋 Diagnostics</option>
+        </select>
       </div>
 
       {/* Main Interactive Visual Content Area */}
-      <div className="relative z-10 min-h-[170px] flex flex-col justify-center">
+      <div className="relative z-10 flex flex-col justify-center">
         {activeViewMode === "flow" && (
           <div className="relative w-full flex flex-col items-center">
             {/* Canvas Blood Flow */}
